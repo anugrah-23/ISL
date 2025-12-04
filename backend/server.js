@@ -9,6 +9,9 @@ const getPool = require('./config/db');
 const authRoutes = require('./routes/auth');
 const contentRoutes = require('./routes/content');
 
+const videosRoutes = require('./routes/videos');
+const coursesRoutes = require('./routes/courses');
+
 let remindersRoutes;
 try {
   remindersRoutes = require('./routes/reminders');
@@ -45,6 +48,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack || err);
   res.status(500).json({ message: 'Something went wrong!' });
 });
+
+app.use('/api/videos', videosRoutes);     // upload & presign endpoints
+app.use('/api/courses', coursesRoutes);   // courses listing used by frontend
 
 const PORT = process.env.PORT || 5000;
 

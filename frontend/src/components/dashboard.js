@@ -1,9 +1,12 @@
+// frontend/src/components/dashboard.js
 import React from 'react';
 import { BookOpen, Video, Trophy, Users } from 'lucide-react';
 import { useAuth } from '../context/authcontext';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const stats = [
     { icon: BookOpen, label: 'Courses Enrolled', value: '0', color: 'bg-blue-500' },
@@ -24,30 +27,14 @@ const Dashboard = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div key={index} className="bg-white rounded-xl shadow-md p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-600 text-sm mb-1">{stat.label}</p>
-                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                  </div>
-                  <div className={`${stat.color} p-3 rounded-lg`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-md p-6">
             <h3 className="text-xl font-bold text-gray-900 mb-4">Start Learning</h3>
             <p className="text-gray-600 mb-4">Begin your ISL journey with beginner-friendly courses.</p>
-            <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => navigate('/courses')}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
               Browse Courses
             </button>
           </div>
