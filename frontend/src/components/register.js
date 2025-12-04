@@ -22,47 +22,51 @@ const Register = ({ onToggle }) => {
   const validateEmail = (email) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = async () => {
-    const newErrors = {};
+const handleSubmit = async () => {
+  const newErrors = {};
 
-    if (!formData.name || formData.name.length < 2)
-      newErrors.name = 'Name is required';
+  if (!formData.name || formData.name.length < 2)
+    newErrors.name = 'Name is required';
 
-    if (!formData.email || !validateEmail(formData.email))
-      newErrors.email = 'Valid email required';
+  if (!formData.email || !validateEmail(formData.email))
+    newErrors.email = 'Valid email required';
 
-    if (!formData.phone || !/^[6-9]\d{9}$/.test(formData.phone))
-      newErrors.phone = 'Valid 10-digit phone number required';
+  if (!formData.phone || !/^[6-9]\d{9}$/.test(formData.phone))
+    newErrors.phone = 'Valid 10-digit phone number required';
 
-    if (!formData.password || formData.password.length < 8)
-      newErrors.password = 'Password must be at least 8 characters';
+  if (!formData.password || formData.password.length < 8)
+    newErrors.password = 'Password must be at least 8 characters';
 
-    if (formData.password !== formData.confirmPassword)
-      newErrors.confirmPassword = 'Passwords must match';
+  if (!formData.confirmPassword)
+    newErrors.confirmPassword = 'Please re-enter your password';
 
-    if (Object.keys(newErrors).length) {
-      setErrors(newErrors);
-      return;
-    }
+  if (formData.password !== formData.confirmPassword)
+    newErrors.confirmPassword = 'Passwords do not match';
 
-    setLoading(true);
+  // ⛔ STOP HERE if any error exists
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
 
-    const result = await register({
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      password: formData.password,
-    });
+  // Proceed only if no errors
+  setLoading(true);
+  const result = await register({
+    name: formData.name,
+    email: formData.email,
+    phone: formData.phone,
+    password: formData.password,
+  });
+  setLoading(false);
 
-    setLoading(false);
+  if (!result.success) {
+    setErrors({ general: result.message });
+    return;
+  }
 
-    if (!result.success) {
-      setErrors({ general: result.message });
-      return;
-    }
+  navigate('/');
+};
 
-    navigate('/');
-  };
 
   return (
     <div className="space-y-5">
@@ -130,14 +134,12 @@ const Register = ({ onToggle }) => {
         <input
           type="password"
           value={formData.confirmPassword}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              confirmPassword: e.target.value,
-            })
-          }
-          className="w-full p-3 border rounded-lg"
+          onChange={(e) => setFormData({...formData,confirmPassword: e.target.value})}
+          className={`w-full p-3 border rounded-lg ${errors.confirmPassword ? 'border-red-500' : ''}`}
         />
+        {errors.confirmPassword && (
+          <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>
+        )}
       </div>
 
       {/* SUBMIT BUTTON */}
