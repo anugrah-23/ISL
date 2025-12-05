@@ -5,6 +5,24 @@ import axios from 'axios';
 import { useAuth } from '../context/authcontext';
 import { useNavigate } from 'react-router-dom';
 
+function cleanTitle(raw = '') {
+  if (!raw) return '';
+  // Remove known prefixes
+  const cleaned = raw
+    .replace(/^Wan_ISL_Animate_/, '')
+    .replace(/^Wan_Avatar_Animate_/, '')
+    .replace(/^Wan_ISL_/, '')
+    .replace(/^Wan_Avatar_/, '')
+    .replace(/_/g, ' ')
+    .trim();
+
+  // Title-case each word (keeps punctuation like parentheses)
+  return cleaned
+    .split(' ')
+    .map(w => (w.length > 0 ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
+    .join(' ');
+}
+
 export default function ISLCoursePlayer({ apiBase = '/api' }) {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -142,7 +160,7 @@ export default function ISLCoursePlayer({ apiBase = '/api' }) {
                     {Array.isArray(c.lessons) && c.lessons.length ? c.lessons.map((ls, li) => (
                       <li key={ls.id || li}>
                         <button onClick={() => selectLesson(li)} className={`w-full text-left px-2 py-1 rounded-md text-sm ${li === selectedLessonIndex ? 'font-semibold text-indigo-700' : 'hover:bg-gray-50'}`}>
-                          {ls.title}
+                          {cleanTitle(ls.title)}
                         </button>
                       </li>
                     )) : <li className="text-sm text-gray-500 px-2">No lessons</li>}
@@ -176,7 +194,7 @@ export default function ISLCoursePlayer({ apiBase = '/api' }) {
 
           <div className="mt-4">
             <div className="text-sm text-gray-500">Sign shown in video</div>
-            <div className="mt-1 text-2xl font-semibold">{lesson?.title || '—'}</div>
+            <div className="mt-1 text-2xl font-semibold">{cleanTitle(lesson?.title) || '—'}</div>
 
             <div className="mt-3 flex gap-2">
               <button onClick={prevLesson} className="px-3 py-2 rounded-xl border">Previous</button>
