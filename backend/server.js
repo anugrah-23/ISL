@@ -1,77 +1,58 @@
 // backend/server.js
-const dotenv = require('dotenv');
-dotenv.config();
-
+require('dotenv').config();
 const express = require('express');
+const http = require('http');
 const cors = require('cors');
+const cron = require('node-cron');
+
 const getPool = require('./config/db');
-
-const authRoutes = require('./routes/auth');
-const contentRoutes = require('./routes/content');
-
-const videosRoutes = require('./routes/videos');
-const coursesRoutes = require('./routes/courses');
-
-let remindersRoutes;
-try {
-  remindersRoutes = require('./routes/reminders');
-} catch {
-  remindersRoutes = null;
-}
-
-const { scheduleReminders } = require('./jobs/reminder-job');
+const { scheduleReminders } = require('./jobs/reminder-jobs');
+const runAchievementEngine = require('./jobs/achievement-engine');
 
 const app = express();
+app.use(cors());
+app.use(express.json({ limit: '20mb' }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// REST API ROUTES
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/courses', require('./routes/courses'));
+app.use('/api/content', require('./routes/content'));
+app.use('/api/videos', require('./routes/videos'));
+app.use('/api/duel', require('./routes/duel'));
 
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? 'https://your-production-domain.com'
-        : 'http://localhost:3000',
-    credentials: true,
-  })
-);
+app.use('/api/stories', require('./routes/stories'));
+app.use('/api/battles', require('./routes/battles'));
+app.use('/api/achievements', require('./routes/achievements'));
+app.use('/api/player', require('./routes/player'));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/content', contentRoutes);
-if (remindersRoutes) app.use('/api/reminders', remindersRoutes);
+app.get('/health', (req, res) => res.json({ ok: true }));
 
-app.get('/api/health', (req, res) =>
-  res.json({ status: 'OK', message: 'Server is running' })
-);
+// HTTP SERVER
+const server = http.createServer(app);
 
-app.use((err, req, res, next) => {
-  console.error(err.stack || err);
-  res.status(500).json({ message: 'Something went wrong!' });
+// SOCKET.IO
+const { Server } = require('socket.io');
+const io = new Server(server, {
+  cors: { origin: '*', methods: ['GET', 'POST'] }
 });
+app.set('io', io);
 
-app.use('/api/videos', videosRoutes);     // upload & presign endpoints
-app.use('/api/courses', coursesRoutes);   // courses listing used by frontend
+// SOCKET HANDLERS
+require('./sockets/battles')(io);
+require('./sockets/games')(io);
+require('./sockets/duel')(io);       // ⭐ REQUIRED FOR MATCHMAKING
 
 const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 
-(async () => {
-  try {
-    getPool(); // Initialize DB
+  try { scheduleReminders(); }
+  catch (e) { console.warn('Reminder scheduling failed', e.message); }
 
-    if (String(process.env.ENABLE_REMINDERS).toLowerCase() === 'true') {
-      scheduleReminders();
-      console.log('Reminder scheduler enabled.');
-    } else {
-      console.log('Reminder scheduler disabled.');
-    }
-
-    app.listen(PORT, () =>
-      console.log(
-        `Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`
-      )
-    );
-  } catch (err) {
-    console.error('Failed to start server:', err.message);
-    process.exit(1);
-  }
-})();
+  const achCron = process.env.ACHIEVEMENTS_CRON || '15 3 * * *';
+  cron.schedule(achCron, async () => {
+    console.log('Achievement cron triggered');
+    try { await runAchievementEngine(); }
+    catch (e) { console.error('Achievement run failed', e.message); }
+  }, { timezone: process.env.ACHIEVEMENTS_TZ || 'UTC' });
+});

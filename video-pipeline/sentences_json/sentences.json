@@ -1,0 +1,1524 @@
+[
+  {
+    "id": 1,
+    "text": "Hello, how are you?",
+    "tokens": [
+      "hello",
+      "how",
+      "are",
+      "you"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Good morning.",
+    "tokens": [
+      "good",
+      "morning"
+    ]
+  },
+  {
+    "id": 3,
+    "text": "Good afternoon.",
+    "tokens": [
+      "good",
+      "afternoon"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "Good night.",
+    "tokens": [
+      "good",
+      "night"
+    ]
+  },
+  {
+    "id": 5,
+    "text": "What is your name?",
+    "tokens": [
+      "what",
+      "is",
+      "your",
+      "name"
+    ]
+  },
+  {
+    "id": 6,
+    "text": "My name is _____ .",
+    "tokens": [
+      "my",
+      "name",
+      "is",
+      "name"
+    ]
+  },
+  {
+    "id": 7,
+    "text": "Nice to meet you.",
+    "tokens": [
+      "nice",
+      "to",
+      "meet",
+      "you"
+    ]
+  },
+  {
+    "id": 8,
+    "text": "Please sit down.",
+    "tokens": [
+      "please",
+      "sit_down"
+    ]
+  },
+  {
+    "id": 9,
+    "text": "Thank you very much.",
+    "tokens": [
+      "thank",
+      "you",
+      "very",
+      "much"
+    ]
+  },
+  {
+    "id": 10,
+    "text": "You are welcome.",
+    "tokens": [
+      "you",
+      "are",
+      "welcome"
+    ]
+  },
+  {
+    "id": 11,
+    "text": "Sorry, I didn’t understand.",
+    "tokens": [
+      "sorry",
+      "i",
+      "didnt",
+      "understand"
+    ]
+  },
+  {
+    "id": 12,
+    "text": "Can you repeat that?",
+    "tokens": [
+      "can",
+      "you",
+      "repeat",
+      "that"
+    ]
+  },
+  {
+    "id": 13,
+    "text": "See you later.",
+    "tokens": [
+      "see",
+      "you",
+      "later"
+    ]
+  },
+  {
+    "id": 14,
+    "text": "Take care.",
+    "tokens": [
+      "take",
+      "care"
+    ]
+  },
+  {
+    "id": 15,
+    "text": "Where are you going?",
+    "tokens": [
+      "where",
+      "are",
+      "you",
+      "going"
+    ]
+  },
+  {
+    "id": 16,
+    "text": "I am going home.",
+    "tokens": [
+      "i",
+      "am",
+      "going",
+      "home"
+    ]
+  },
+  {
+    "id": 17,
+    "text": "How was your day?",
+    "tokens": [
+      "how",
+      "was",
+      "your",
+      "day"
+    ]
+  },
+  {
+    "id": 18,
+    "text": "I am fine.",
+    "tokens": [
+      "i",
+      "am",
+      "fine"
+    ]
+  },
+  {
+    "id": 19,
+    "text": "I am not feeling well.",
+    "tokens": [
+      "i",
+      "am",
+      "not",
+      "feeling",
+      "well"
+    ]
+  },
+  {
+    "id": 20,
+    "text": "I need help.",
+    "tokens": [
+      "i",
+      "need",
+      "help"
+    ]
+  },
+  {
+    "id": 21,
+    "text": "I woke up early today.",
+    "tokens": [
+      "i",
+      "woke",
+      "up",
+      "early",
+      "today"
+    ]
+  },
+  {
+    "id": 22,
+    "text": "I have to get ready for work.",
+    "tokens": [
+      "i",
+      "have_to",
+      "get",
+      "ready",
+      "for",
+      "work"
+    ]
+  },
+  {
+    "id": 23,
+    "text": "I am brushing my teeth.",
+    "tokens": [
+      "i",
+      "am",
+      "brushing",
+      "my",
+      "teeth"
+    ]
+  },
+  {
+    "id": 24,
+    "text": "I am taking a bath.",
+    "tokens": [
+      "i",
+      "am",
+      "taking",
+      "a",
+      "bath"
+    ]
+  },
+  {
+    "id": 25,
+    "text": "I am eating breakfast.",
+    "tokens": [
+      "i",
+      "am",
+      "eating",
+      "breakfast"
+    ]
+  },
+  {
+    "id": 26,
+    "text": "I am leaving now.",
+    "tokens": [
+      "i",
+      "am",
+      "leaving",
+      "now"
+    ]
+  },
+  {
+    "id": 27,
+    "text": "I reached office.",
+    "tokens": [
+      "i",
+      "reached",
+      "office"
+    ]
+  },
+  {
+    "id": 28,
+    "text": "I am doing my work.",
+    "tokens": [
+      "i",
+      "am",
+      "doing",
+      "my",
+      "work"
+    ]
+  },
+  {
+    "id": 29,
+    "text": "I am studying right now.",
+    "tokens": [
+      "i",
+      "am",
+      "studying",
+      "right",
+      "now"
+    ]
+  },
+  {
+    "id": 30,
+    "text": "I am cooking food.",
+    "tokens": [
+      "i",
+      "am",
+      "cooking",
+      "food"
+    ]
+  },
+  {
+    "id": 31,
+    "text": "I am washing clothes.",
+    "tokens": [
+      "i",
+      "am",
+      "washing",
+      "clothes"
+    ]
+  },
+  {
+    "id": 32,
+    "text": "I am cleaning the room.",
+    "tokens": [
+      "i",
+      "am",
+      "cleaning",
+      "the",
+      "room"
+    ]
+  },
+  {
+    "id": 33,
+    "text": "I am watching TV.",
+    "tokens": [
+      "i",
+      "am",
+      "watching",
+      "tv"
+    ]
+  },
+  {
+    "id": 34,
+    "text": "I am going to sleep.",
+    "tokens": [
+      "i",
+      "am",
+      "going",
+      "to",
+      "sleep"
+    ]
+  },
+  {
+    "id": 35,
+    "text": "I am feeling tired.",
+    "tokens": [
+      "i",
+      "am",
+      "feeling",
+      "tired"
+    ]
+  },
+  {
+    "id": 36,
+    "text": "I forgot my keys.",
+    "tokens": [
+      "i",
+      "forgot",
+      "my",
+      "keys"
+    ]
+  },
+  {
+    "id": 37,
+    "text": "I am running late.",
+    "tokens": [
+      "i",
+      "am",
+      "running",
+      "late"
+    ]
+  },
+  {
+    "id": 38,
+    "text": "I need to charge my phone.",
+    "tokens": [
+      "i",
+      "need",
+      "to",
+      "charge",
+      "my",
+      "phone"
+    ]
+  },
+  {
+    "id": 39,
+    "text": "I have many things to do.",
+    "tokens": [
+      "i",
+      "have",
+      "many",
+      "things",
+      "to",
+      "do"
+    ]
+  },
+  {
+    "id": 40,
+    "text": "Let’s take a break.",
+    "tokens": [
+      "lets",
+      "take",
+      "a",
+      "break"
+    ]
+  },
+  {
+    "id": 41,
+    "text": "This is my mother.",
+    "tokens": [
+      "this",
+      "is",
+      "my",
+      "mother"
+    ]
+  },
+  {
+    "id": 42,
+    "text": "This is my father.",
+    "tokens": [
+      "this",
+      "is",
+      "my",
+      "father"
+    ]
+  },
+  {
+    "id": 43,
+    "text": "I have one brother.",
+    "tokens": [
+      "i",
+      "have",
+      "one",
+      "brother"
+    ]
+  },
+  {
+    "id": 44,
+    "text": "I have one sister.",
+    "tokens": [
+      "i",
+      "have",
+      "one",
+      "sister"
+    ]
+  },
+  {
+    "id": 45,
+    "text": "My family is very supportive.",
+    "tokens": [
+      "my",
+      "family",
+      "is",
+      "very",
+      "supportive"
+    ]
+  },
+  {
+    "id": 46,
+    "text": "Where is your house?",
+    "tokens": [
+      "where",
+      "is",
+      "your",
+      "house"
+    ]
+  },
+  {
+    "id": 47,
+    "text": "My house is near the market.",
+    "tokens": [
+      "my",
+      "house",
+      "is",
+      "near",
+      "the",
+      "market"
+    ]
+  },
+  {
+    "id": 48,
+    "text": "Do you live alone?",
+    "tokens": [
+      "do",
+      "you",
+      "live",
+      "alone"
+    ]
+  },
+  {
+    "id": 49,
+    "text": "I live with my family.",
+    "tokens": [
+      "i",
+      "live",
+      "with",
+      "my",
+      "family"
+    ]
+  },
+  {
+    "id": 50,
+    "text": "I am going to visit my relatives.",
+    "tokens": [
+      "i",
+      "am",
+      "going",
+      "to",
+      "visit",
+      "my",
+      "relatives"
+    ]
+  },
+  {
+    "id": 51,
+    "text": "My friend is coming today.",
+    "tokens": [
+      "my",
+      "friend",
+      "is",
+      "coming",
+      "today"
+    ]
+  },
+  {
+    "id": 52,
+    "text": "I will call you later.",
+    "tokens": [
+      "i",
+      "will",
+      "call",
+      "you",
+      "later"
+    ]
+  },
+  {
+    "id": 53,
+    "text": "I miss you.",
+    "tokens": [
+      "i",
+      "miss",
+      "you"
+    ]
+  },
+  {
+    "id": 54,
+    "text": "I am very happy today.",
+    "tokens": [
+      "i",
+      "am",
+      "very",
+      "happy",
+      "today"
+    ]
+  },
+  {
+    "id": 55,
+    "text": "I am feeling sad.",
+    "tokens": [
+      "i",
+      "am",
+      "feeling",
+      "sad"
+    ]
+  },
+  {
+    "id": 56,
+    "text": "Dont worry, everything is fine.",
+    "tokens": [
+      "dont",
+      "worry",
+      "everything",
+      "is",
+      "fine"
+    ]
+  },
+  {
+    "id": 57,
+    "text": "I am proud of you.",
+    "tokens": [
+      "i",
+      "am",
+      "proud",
+      "of",
+      "you"
+    ]
+  },
+  {
+    "id": 58,
+    "text": "Please wait for me.",
+    "tokens": [
+      "please",
+      "wait",
+      "for",
+      "me"
+    ]
+  },
+  {
+    "id": 59,
+    "text": "Can you come with me?",
+    "tokens": [
+      "can",
+      "you",
+      "come",
+      "with",
+      "me"
+    ]
+  },
+  {
+    "id": 60,
+    "text": "I am busy right now.",
+    "tokens": [
+      "i",
+      "am",
+      "busy",
+      "right",
+      "now"
+    ]
+  },
+  {
+    "id": 61,
+    "text": "I am hungry.",
+    "tokens": [
+      "i",
+      "am",
+      "hungry"
+    ]
+  },
+  {
+    "id": 62,
+    "text": "I am thirsty.",
+    "tokens": [
+      "i",
+      "am",
+      "thirsty"
+    ]
+  },
+  {
+    "id": 63,
+    "text": "What do you want to eat?",
+    "tokens": [
+      "what",
+      "do",
+      "you",
+      "want",
+      "to",
+      "eat"
+    ]
+  },
+  {
+    "id": 64,
+    "text": "I want water.",
+    "tokens": [
+      "i",
+      "want",
+      "water"
+    ]
+  },
+  {
+    "id": 65,
+    "text": "I want tea.",
+    "tokens": [
+      "i",
+      "want",
+      "tea"
+    ]
+  },
+  {
+    "id": 66,
+    "text": "I want coffee.",
+    "tokens": [
+      "i",
+      "want",
+      "coffee"
+    ]
+  },
+  {
+    "id": 67,
+    "text": "I like spicy food.",
+    "tokens": [
+      "i",
+      "like",
+      "spicy",
+      "food"
+    ]
+  },
+  {
+    "id": 68,
+    "text": "I dont like sweet food.",
+    "tokens": [
+      "i",
+      "dont",
+      "like",
+      "sweet",
+      "food"
+    ]
+  },
+  {
+    "id": 69,
+    "text": "Is the food ready?",
+    "tokens": [
+      "is",
+      "the",
+      "food",
+      "ready"
+    ]
+  },
+  {
+    "id": 70,
+    "text": "The food is very tasty.",
+    "tokens": [
+      "the",
+      "food",
+      "is",
+      "very",
+      "tasty"
+    ]
+  },
+  {
+    "id": 71,
+    "text": "I want more.",
+    "tokens": [
+      "i",
+      "want",
+      "more"
+    ]
+  },
+  {
+    "id": 72,
+    "text": "I dont want this.",
+    "tokens": [
+      "i",
+      "dont",
+      "want",
+      "this"
+    ]
+  },
+  {
+    "id": 73,
+    "text": "How much does this cost?",
+    "tokens": [
+      "how",
+      "much",
+      "does",
+      "this",
+      "cost"
+    ]
+  },
+  {
+    "id": 74,
+    "text": "This is too expensive.",
+    "tokens": [
+      "this",
+      "is",
+      "too",
+      "expensive"
+    ]
+  },
+  {
+    "id": 75,
+    "text": "Can you give me a discount?",
+    "tokens": [
+      "can",
+      "you",
+      "give",
+      "me",
+      "a",
+      "discount"
+    ]
+  },
+  {
+    "id": 76,
+    "text": "I want to buy vegetables.",
+    "tokens": [
+      "i",
+      "want",
+      "to",
+      "buy",
+      "vegetables"
+    ]
+  },
+  {
+    "id": 77,
+    "text": "I am going to the market.",
+    "tokens": [
+      "i",
+      "am",
+      "going",
+      "to",
+      "the",
+      "market"
+    ]
+  },
+  {
+    "id": 78,
+    "text": "I need to buy medicines.",
+    "tokens": [
+      "i",
+      "need",
+      "to",
+      "buy",
+      "medicines"
+    ]
+  },
+  {
+    "id": 79,
+    "text": "Can you pack this?",
+    "tokens": [
+      "can",
+      "you",
+      "pack",
+      "this"
+    ]
+  },
+  {
+    "id": 80,
+    "text": "I forgot my wallet.",
+    "tokens": [
+      "i",
+      "forgot",
+      "my",
+      "wallet"
+    ]
+  },
+  {
+    "id": 81,
+    "text": "Do you accept online payment?",
+    "tokens": [
+      "do",
+      "you",
+      "accept",
+      "online",
+      "payment"
+    ]
+  },
+  {
+    "id": 82,
+    "text": "I want cold water.",
+    "tokens": [
+      "i",
+      "want",
+      "cold",
+      "water"
+    ]
+  },
+  {
+    "id": 83,
+    "text": "The shop is closed.",
+    "tokens": [
+      "the",
+      "shop",
+      "is",
+      "closed"
+    ]
+  },
+  {
+    "id": 84,
+    "text": "The shop is open.",
+    "tokens": [
+      "the",
+      "shop",
+      "is",
+      "open"
+    ]
+  },
+  {
+    "id": 85,
+    "text": "Please give me the bill.",
+    "tokens": [
+      "please",
+      "give",
+      "me",
+      "the",
+      "bill"
+    ]
+  },
+  {
+    "id": 86,
+    "text": "I want to order food.",
+    "tokens": [
+      "i",
+      "want",
+      "to",
+      "order",
+      "food"
+    ]
+  },
+  {
+    "id": 87,
+    "text": "I already ate lunch.",
+    "tokens": [
+      "i",
+      "already",
+      "ate",
+      "lunch"
+    ]
+  },
+  {
+    "id": 88,
+    "text": "Lets go out for dinner.",
+    "tokens": [
+      "lets",
+      "go",
+      "out",
+      "for",
+      "dinner"
+    ]
+  },
+  {
+    "id": 89,
+    "text": "I like this item.",
+    "tokens": [
+      "i",
+      "like",
+      "this",
+      "item"
+    ]
+  },
+  {
+    "id": 90,
+    "text": "I dont want anything else.",
+    "tokens": [
+      "i",
+      "dont",
+      "want",
+      "anything",
+      "else"
+    ]
+  },
+  {
+    "id": 91,
+    "text": "Where is the bathroom?",
+    "tokens": [
+      "where",
+      "is",
+      "the",
+      "bathroom"
+    ]
+  },
+  {
+    "id": 92,
+    "text": "Where is the bus stop?",
+    "tokens": [
+      "where",
+      "is",
+      "the",
+      "bus",
+      "stop"
+    ]
+  },
+  {
+    "id": 93,
+    "text": "How do I go to the station?",
+    "tokens": [
+      "how",
+      "do",
+      "i",
+      "go",
+      "to",
+      "the",
+      "station"
+    ]
+  },
+  {
+    "id": 94,
+    "text": "Please show me the way.",
+    "tokens": [
+      "please",
+      "show",
+      "me",
+      "the",
+      "way"
+    ]
+  },
+  {
+    "id": 95,
+    "text": "Turn left.",
+    "tokens": [
+      "turn",
+      "left"
+    ]
+  },
+  {
+    "id": 96,
+    "text": "Turn right.",
+    "tokens": [
+      "turn",
+      "right"
+    ]
+  },
+  {
+    "id": 97,
+    "text": "Go straight.",
+    "tokens": [
+      "go",
+      "straight"
+    ]
+  },
+  {
+    "id": 98,
+    "text": "Stop here.",
+    "tokens": [
+      "stop",
+      "here"
+    ]
+  },
+  {
+    "id": 99,
+    "text": "I need a taxi.",
+    "tokens": [
+      "i",
+      "need",
+      "a",
+      "taxi"
+    ]
+  },
+  {
+    "id": 100,
+    "text": "I missed the bus.",
+    "tokens": [
+      "i",
+      "missed",
+      "the",
+      "bus"
+    ]
+  },
+  {
+    "id": 101,
+    "text": "I will come in 10 minutes.",
+    "tokens": [
+      "i",
+      "will",
+      "come",
+      "in",
+      "10",
+      "minutes"
+    ]
+  },
+  {
+    "id": 102,
+    "text": "Traffic is very heavy.",
+    "tokens": [
+      "traffic",
+      "is",
+      "very",
+      "heavy"
+    ]
+  },
+  {
+    "id": 103,
+    "text": "I am stuck in traffic.",
+    "tokens": [
+      "i",
+      "am",
+      "stuck",
+      "in",
+      "traffic"
+    ]
+  },
+  {
+    "id": 104,
+    "text": "I reached the place.",
+    "tokens": [
+      "i",
+      "reached",
+      "the",
+      "place"
+    ]
+  },
+  {
+    "id": 105,
+    "text": "I cannot find the address.",
+    "tokens": [
+      "i",
+      "cannot",
+      "find",
+      "the",
+      "address"
+    ]
+  },
+  {
+    "id": 106,
+    "text": "Please walk slowly.",
+    "tokens": [
+      "please",
+      "walk",
+      "slowly"
+    ]
+  },
+  {
+    "id": 107,
+    "text": "When will the train arrive?",
+    "tokens": [
+      "when",
+      "will",
+      "the",
+      "train",
+      "arrive"
+    ]
+  },
+  {
+    "id": 108,
+    "text": "I am travelling today.",
+    "tokens": [
+      "i",
+      "am",
+      "travelling",
+      "today"
+    ]
+  },
+  {
+    "id": 109,
+    "text": "My flight is delayed.",
+    "tokens": [
+      "my",
+      "flight",
+      "is",
+      "delayed"
+    ]
+  },
+  {
+    "id": 110,
+    "text": "I need to go home.",
+    "tokens": [
+      "i",
+      "need",
+      "to",
+      "go",
+      "home"
+    ]
+  },
+  {
+    "id": 111,
+    "text": "I have a meeting now.",
+    "tokens": [
+      "i",
+      "have",
+      "a",
+      "meeting",
+      "now"
+    ]
+  },
+  {
+    "id": 112,
+    "text": "The work is completed.",
+    "tokens": [
+      "the",
+      "work",
+      "is",
+      "completed"
+    ]
+  },
+  {
+    "id": 113,
+    "text": "I need more time.",
+    "tokens": [
+      "i",
+      "need",
+      "more",
+      "time"
+    ]
+  },
+  {
+    "id": 114,
+    "text": "Please send me the file.",
+    "tokens": [
+      "please",
+      "send",
+      "me",
+      "the",
+      "file"
+    ]
+  },
+  {
+    "id": 115,
+    "text": "I will email you.",
+    "tokens": [
+      "i",
+      "will",
+      "email",
+      "you"
+    ]
+  },
+  {
+    "id": 116,
+    "text": "I am facing a problem.",
+    "tokens": [
+      "i",
+      "am",
+      "facing",
+      "a",
+      "problem"
+    ]
+  },
+  {
+    "id": 117,
+    "text": "My laptop is not working.",
+    "tokens": [
+      "my",
+      "laptop",
+      "is",
+      "not",
+      "working"
+    ]
+  },
+  {
+    "id": 118,
+    "text": "The internet is slow.",
+    "tokens": [
+      "the",
+      "internet",
+      "is",
+      "slow"
+    ]
+  },
+  {
+    "id": 119,
+    "text": "Can you fix this?",
+    "tokens": [
+      "can",
+      "you",
+      "fix",
+      "this"
+    ]
+  },
+  {
+    "id": 120,
+    "text": "I need to charge my laptop.",
+    "tokens": [
+      "i",
+      "need",
+      "to",
+      "charge",
+      "my",
+      "laptop"
+    ]
+  },
+  {
+    "id": 121,
+    "text": "I am attending class.",
+    "tokens": [
+      "i",
+      "am",
+      "attending",
+      "class"
+    ]
+  },
+  {
+    "id": 122,
+    "text": "The teacher is explaining.",
+    "tokens": [
+      "the",
+      "teacher",
+      "is",
+      "explaining"
+    ]
+  },
+  {
+    "id": 123,
+    "text": "I have homework.",
+    "tokens": [
+      "i",
+      "have",
+      "homework"
+    ]
+  },
+  {
+    "id": 124,
+    "text": "I finished my homework.",
+    "tokens": [
+      "i",
+      "finished",
+      "my",
+      "homework"
+    ]
+  },
+  {
+    "id": 125,
+    "text": "I need a pen.",
+    "tokens": [
+      "i",
+      "need",
+      "a",
+      "pen"
+    ]
+  },
+  {
+    "id": 126,
+    "text": "Please write it down.",
+    "tokens": [
+      "please",
+      "write",
+      "it",
+      "down"
+    ]
+  },
+  {
+    "id": 127,
+    "text": "Please sign this paper.",
+    "tokens": [
+      "please",
+      "sign",
+      "this",
+      "paper"
+    ]
+  },
+  {
+    "id": 128,
+    "text": "I forgot the password.",
+    "tokens": [
+      "i",
+      "forgot",
+      "the",
+      "password"
+    ]
+  },
+  {
+    "id": 129,
+    "text": "Please restart the system.",
+    "tokens": [
+      "please",
+      "restart",
+      "the",
+      "system"
+    ]
+  },
+  {
+    "id": 130,
+    "text": "The screen is not loading.",
+    "tokens": [
+      "the",
+      "screen",
+      "is",
+      "not",
+      "loading"
+    ]
+  },
+  {
+    "id": 131,
+    "text": "I am not feeling well.",
+    "tokens": [
+      "i",
+      "am",
+      "not",
+      "feeling",
+      "well"
+    ]
+  },
+  {
+    "id": 132,
+    "text": "I have a fever.",
+    "tokens": [
+      "i",
+      "have",
+      "a",
+      "fever"
+    ]
+  },
+  {
+    "id": 133,
+    "text": "I have a headache.",
+    "tokens": [
+      "i",
+      "have",
+      "a",
+      "headache"
+    ]
+  },
+  {
+    "id": 134,
+    "text": "I need a doctor.",
+    "tokens": [
+      "i",
+      "need",
+      "a",
+      "doctor"
+    ]
+  },
+  {
+    "id": 135,
+    "text": "Where is the hospital?",
+    "tokens": [
+      "where",
+      "is",
+      "the",
+      "hospital"
+    ]
+  },
+  {
+    "id": 136,
+    "text": "Please call an ambulance.",
+    "tokens": [
+      "please",
+      "call",
+      "an",
+      "ambulance"
+    ]
+  },
+  {
+    "id": 137,
+    "text": "I hurt my hand.",
+    "tokens": [
+      "i",
+      "hurt",
+      "my",
+      "hand"
+    ]
+  },
+  {
+    "id": 138,
+    "text": "I feel dizzy.",
+    "tokens": [
+      "i",
+      "feel",
+      "dizzy"
+    ]
+  },
+  {
+    "id": 139,
+    "text": "Please give me water.",
+    "tokens": [
+      "please",
+      "give",
+      "me",
+      "water"
+    ]
+  },
+  {
+    "id": 140,
+    "text": "I need medicine.",
+    "tokens": [
+      "i",
+      "need",
+      "medicine"
+    ]
+  },
+  {
+    "id": 141,
+    "text": "It is an emergency.",
+    "tokens": [
+      "it",
+      "is",
+      "an",
+      "emergency"
+    ]
+  },
+  {
+    "id": 142,
+    "text": "Please stay calm.",
+    "tokens": [
+      "please",
+      "stay",
+      "calm"
+    ]
+  },
+  {
+    "id": 143,
+    "text": "Dont move.",
+    "tokens": [
+      "dont",
+      "move"
+    ]
+  },
+  {
+    "id": 144,
+    "text": "I need help immediately.",
+    "tokens": [
+      "i",
+      "need",
+      "help",
+      "immediately"
+    ]
+  },
+  {
+    "id": 145,
+    "text": "Someone is injured.",
+    "tokens": [
+      "someone",
+      "is",
+      "injured"
+    ]
+  },
+  {
+    "id": 146,
+    "text": "Please stop the car.",
+    "tokens": [
+      "please",
+      "stop",
+      "the",
+      "car"
+    ]
+  },
+  {
+    "id": 147,
+    "text": "Be careful.",
+    "tokens": [
+      "be",
+      "careful"
+    ]
+  },
+  {
+    "id": 148,
+    "text": "Everything is under control.",
+    "tokens": [
+      "everything",
+      "is",
+      "under",
+      "control"
+    ]
+  },
+  {
+    "id": 149,
+    "text": "Call the police.",
+    "tokens": [
+      "call",
+      "the",
+      "police"
+    ]
+  },
+  {
+    "id": 150,
+    "text": "I am safe now.",
+    "tokens": [
+      "i",
+      "am",
+      "safe",
+      "now"
+    ]
+  }
+]

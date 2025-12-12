@@ -1,0 +1,1554 @@
+[
+  {
+    "id": 1,
+    "text": "Hello, how are you?",
+    "isl_tokens": [
+      "hello",
+      "how",
+      "you"
+    ],
+    "tokens": [
+      {
+        "token": "hello",
+        "available": true,
+        "filenames": [
+          "hello.mp4"
+        ]
+      },
+      {
+        "token": "how",
+        "available": true,
+        "filenames": [
+          "how.mp4"
+        ]
+      },
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "hello",
+      "how",
+      "you"
+    ]
+  },
+  {
+    "id": 2,
+    "text": "Good morning.",
+    "isl_tokens": [
+      "good",
+      "morning"
+    ],
+    "tokens": [
+      {
+        "token": "good",
+        "available": true,
+        "filenames": [
+          "good.mp4"
+        ]
+      },
+      {
+        "token": "morning",
+        "available": true,
+        "filenames": [
+          "morning.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "good",
+      "morning"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 3,
+    "text": "Good afternoon.",
+    "isl_tokens": [
+      "good",
+      "afternoon"
+    ],
+    "tokens": [
+      {
+        "token": "good",
+        "available": true,
+        "filenames": [
+          "good.mp4"
+        ]
+      },
+      {
+        "token": "afternoon",
+        "available": true,
+        "filenames": [
+          "afternoon.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "good",
+      "afternoon"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 4,
+    "text": "Good night.",
+    "isl_tokens": [
+      "good",
+      "night"
+    ],
+    "tokens": [
+      {
+        "token": "good",
+        "available": true,
+        "filenames": [
+          "good.mp4"
+        ]
+      },
+      {
+        "token": "night",
+        "available": true,
+        "filenames": [
+          "night.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "good",
+      "night"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 5,
+    "text": "What is your name?",
+    "isl_tokens": [
+      "your",
+      "name",
+      "what",
+      "question"
+    ],
+    "tokens": [
+      {
+        "token": "your",
+        "available": true,
+        "filenames": [
+          "your.mp4"
+        ]
+      },
+      {
+        "token": "name",
+        "available": true,
+        "filenames": [
+          "name.mp4"
+        ]
+      },
+      {
+        "token": "what",
+        "available": true,
+        "filenames": [
+          "what.mp4"
+        ]
+      },
+      {
+        "token": "question",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "your",
+      "name",
+      "what"
+    ],
+    "missing_tokens": [
+      "question"
+    ]
+  },
+  {
+    "id": 6,
+    "text": "My name is _____ .",
+    "isl_tokens": [
+      "my",
+      "name"
+    ],
+    "tokens": [
+      {
+        "token": "my",
+        "available": true,
+        "filenames": [
+          "my.mp4"
+        ]
+      },
+      {
+        "token": "name",
+        "available": true,
+        "filenames": [
+          "name.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "my",
+      "name"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 7,
+    "text": "Nice to meet you.",
+    "isl_tokens": [
+      "nice",
+      "meet",
+      "you"
+    ],
+    "tokens": [
+      {
+        "token": "nice",
+        "available": true,
+        "filenames": [
+          "nice.mp4"
+        ]
+      },
+      {
+        "token": "meet",
+        "available": true,
+        "filenames": [
+          "meet.mp4"
+        ]
+      },
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "nice",
+      "meet",
+      "you"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 8,
+    "text": "Please sit down.",
+    "isl_tokens": [
+      "please",
+      "sit_down"
+    ],
+    "tokens": [
+      {
+        "token": "please",
+        "available": true,
+        "filenames": [
+          "please.mp4"
+        ]
+      },
+      {
+        "token": "sit_down",
+        "available": true,
+        "filenames": [
+          "sit_down.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "please",
+      "sit_down"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 9,
+    "text": "Thank you very much.",
+    "isl_tokens": [
+      "thank",
+      "you",
+      "very",
+      "much"
+    ],
+    "tokens": [
+      {
+        "token": "thank",
+        "available": true,
+        "filenames": [
+          "thank.mp4"
+        ]
+      },
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      },
+      {
+        "token": "very",
+        "available": true,
+        "filenames": [
+          "very.mp4"
+        ]
+      },
+      {
+        "token": "much",
+        "available": true,
+        "filenames": [
+          "much.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "thank",
+      "you",
+      "very",
+      "much"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 10,
+    "text": "You are welcome.",
+    "isl_tokens": [
+      "you",
+      "welcome"
+    ],
+    "tokens": [
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      },
+      {
+        "token": "welcome",
+        "available": true,
+        "filenames": [
+          "welcome.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "you",
+      "welcome"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 11,
+    "text": "Sorry, I didn’t understand.",
+    "isl_tokens": [
+      "sorry",
+      "not",
+      "understand"
+    ],
+    "tokens": [
+      {
+        "token": "sorry",
+        "available": true,
+        "filenames": [
+          "sorry.mp4"
+        ]
+      },
+      {
+        "token": "not",
+        "available": true,
+        "filenames": [
+          "not.mp4"
+        ]
+      },
+      {
+        "token": "understand",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "sorry",
+      "not"
+    ],
+    "missing_tokens": [
+      "understand"
+    ]
+  },
+  {
+    "id": 12,
+    "text": "Can you repeat that?",
+    "isl_tokens": [
+      "you",
+      "repeat",
+      "that",
+      "question"
+    ],
+    "tokens": [
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      },
+      {
+        "token": "repeat",
+        "available": true,
+        "filenames": [
+          "repeat.mp4"
+        ]
+      },
+      {
+        "token": "that",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "question",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "you",
+      "repeat"
+    ],
+    "missing_tokens": [
+      "that",
+      "question"
+    ]
+  },
+  {
+    "id": 13,
+    "text": "See you later.",
+    "isl_tokens": [
+      "see",
+      "you",
+      "later"
+    ],
+    "tokens": [
+      {
+        "token": "see",
+        "available": true,
+        "filenames": [
+          "see.mp4"
+        ]
+      },
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      },
+      {
+        "token": "later",
+        "available": true,
+        "filenames": [
+          "later.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "see",
+      "you",
+      "later"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 14,
+    "text": "Take care.",
+    "isl_tokens": [
+      "take",
+      "care"
+    ],
+    "tokens": [
+      {
+        "token": "take",
+        "available": true,
+        "filenames": [
+          "take.mp4"
+        ]
+      },
+      {
+        "token": "care",
+        "available": true,
+        "filenames": [
+          "care.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "take",
+      "care"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 15,
+    "text": "Where are you going?",
+    "isl_tokens": [
+      "you",
+      "going",
+      "where",
+      "question"
+    ],
+    "tokens": [
+      {
+        "token": "you",
+        "available": true,
+        "filenames": [
+          "you.mp4"
+        ]
+      },
+      {
+        "token": "going",
+        "available": true,
+        "filenames": [
+          "going.mp4"
+        ]
+      },
+      {
+        "token": "where",
+        "available": true,
+        "filenames": [
+          "where.mp4"
+        ]
+      },
+      {
+        "token": "question",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "you",
+      "going",
+      "where"
+    ],
+    "missing_tokens": [
+      "question"
+    ]
+  },
+  {
+    "id": 16,
+    "text": "I am going home.",
+    "isl_tokens": [
+      "i",
+      "going",
+      "home"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "going",
+        "available": true,
+        "filenames": [
+          "going.mp4"
+        ]
+      },
+      {
+        "token": "home",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "going"
+    ],
+    "missing_tokens": [
+      "i",
+      "home"
+    ]
+  },
+  {
+    "id": 17,
+    "text": "How was your day?",
+    "isl_tokens": [
+      "your",
+      "day",
+      "how",
+      "question"
+    ],
+    "tokens": [
+      {
+        "token": "your",
+        "available": true,
+        "filenames": [
+          "your.mp4"
+        ]
+      },
+      {
+        "token": "day",
+        "available": true,
+        "filenames": [
+          "day.mp4"
+        ]
+      },
+      {
+        "token": "how",
+        "available": true,
+        "filenames": [
+          "how.mp4"
+        ]
+      },
+      {
+        "token": "question",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "your",
+      "day",
+      "how"
+    ],
+    "missing_tokens": [
+      "question"
+    ]
+  },
+  {
+    "id": 18,
+    "text": "I am fine.",
+    "isl_tokens": [
+      "i",
+      "fine"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "fine",
+        "available": true,
+        "filenames": [
+          "fine.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "fine"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 19,
+    "text": "I am not feeling well.",
+    "isl_tokens": [
+      "i",
+      "not",
+      "feeling",
+      "well"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "not",
+        "available": true,
+        "filenames": [
+          "not.mp4"
+        ]
+      },
+      {
+        "token": "feeling",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "well",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "not"
+    ],
+    "missing_tokens": [
+      "i",
+      "feeling",
+      "well"
+    ]
+  },
+  {
+    "id": 20,
+    "text": "I need help.",
+    "isl_tokens": [
+      "i",
+      "need",
+      "help"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "need",
+        "available": true,
+        "filenames": [
+          "need.mp4"
+        ]
+      },
+      {
+        "token": "help",
+        "available": true,
+        "filenames": [
+          "help.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "need",
+      "help"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 21,
+    "text": "I woke up early today.",
+    "isl_tokens": [
+      "i",
+      "woke",
+      "up",
+      "early",
+      "today"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "woke",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "up",
+        "available": true,
+        "filenames": [
+          "up.mp4"
+        ]
+      },
+      {
+        "token": "early",
+        "available": true,
+        "filenames": [
+          "earlier.mp4"
+        ]
+      },
+      {
+        "token": "today",
+        "available": true,
+        "filenames": [
+          "today.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "up",
+      "early",
+      "today"
+    ],
+    "missing_tokens": [
+      "i",
+      "woke"
+    ]
+  },
+  {
+    "id": 22,
+    "text": "I have to get ready for work.",
+    "isl_tokens": [
+      "have",
+      "get",
+      "ready",
+      "work"
+    ],
+    "tokens": [
+      {
+        "token": "have",
+        "available": true,
+        "filenames": [
+          "have.mp4"
+        ]
+      },
+      {
+        "token": "get",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "ready",
+        "available": true,
+        "filenames": [
+          "ready.mp4"
+        ]
+      },
+      {
+        "token": "work",
+        "available": true,
+        "filenames": [
+          "work.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "have",
+      "ready",
+      "work"
+    ],
+    "missing_tokens": [
+      "get"
+    ]
+  },
+  {
+    "id": 24,
+    "text": "I am taking a bath.",
+    "isl_tokens": [
+      "i",
+      "taking",
+      "bath"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "taking",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "bath",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [],
+    "missing_tokens": [
+      "i",
+      "taking",
+      "bath"
+    ]
+  },
+  {
+    "id": 25,
+    "text": "I am eating breakfast.",
+    "isl_tokens": [
+      "i",
+      "eat",
+      "breakfast"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "eat",
+        "available": true,
+        "filenames": [
+          "eat.mp4"
+        ]
+      },
+      {
+        "token": "breakfast",
+        "available": true,
+        "filenames": [
+          "breakfast.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "eat",
+      "breakfast"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 26,
+    "text": "I am leaving now.",
+    "isl_tokens": [
+      "i",
+      "leave",
+      "now"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "leave",
+        "available": true,
+        "filenames": [
+          "leaving.mp4"
+        ]
+      },
+      {
+        "token": "now",
+        "available": true,
+        "filenames": [
+          "now.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "leave",
+      "now"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 27,
+    "text": "I reached office.",
+    "isl_tokens": [
+      "i",
+      "reach",
+      "office"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "reach",
+        "available": true,
+        "filenames": [
+          "reached.mp4"
+        ]
+      },
+      {
+        "token": "office",
+        "available": true,
+        "filenames": [
+          "office.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "reach",
+      "office"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 28,
+    "text": "I am doing my work.",
+    "isl_tokens": [
+      "i",
+      "do",
+      "my",
+      "work"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "do",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "my",
+        "available": true,
+        "filenames": [
+          "my.mp4"
+        ]
+      },
+      {
+        "token": "work",
+        "available": true,
+        "filenames": [
+          "work.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "my",
+      "work"
+    ],
+    "missing_tokens": [
+      "i",
+      "do"
+    ]
+  },
+  {
+    "id": 29,
+    "text": "I am studying right now.",
+    "isl_tokens": [
+      "i",
+      "study",
+      "right_now"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "study",
+        "available": true,
+        "filenames": [
+          "study.mp4"
+        ]
+      },
+      {
+        "token": "right_now",
+        "available": true,
+        "filenames": [
+          "right_now.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "study",
+      "right_now"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 30,
+    "text": "I am cooking food.",
+    "isl_tokens": [
+      "i",
+      "cook",
+      "food"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "cook",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "food",
+        "available": true,
+        "filenames": [
+          "food.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "food"
+    ],
+    "missing_tokens": [
+      "i",
+      "cook"
+    ]
+  },
+  {
+    "id": 31,
+    "text": "I am washing clothes.",
+    "isl_tokens": [
+      "i",
+      "wash_clothes"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "wash_clothes",
+        "available": true,
+        "filenames": [
+          "washing_clothes.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "wash_clothes"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 32,
+    "text": "I am cleaning the room.",
+    "isl_tokens": [
+      "i",
+      "cleaning",
+      "room"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "cleaning",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "room",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [],
+    "missing_tokens": [
+      "i",
+      "cleaning",
+      "room"
+    ]
+  },
+  {
+    "id": 33,
+    "text": "I am watching TV.",
+    "isl_tokens": [
+      "i",
+      "watch",
+      "tv"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "watch",
+        "available": true,
+        "filenames": [
+          "watch.mp4"
+        ]
+      },
+      {
+        "token": "tv",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "watch"
+    ],
+    "missing_tokens": [
+      "i",
+      "tv"
+    ]
+  },
+  {
+    "id": 34,
+    "text": "I am going to sleep.",
+    "isl_tokens": [
+      "i",
+      "going",
+      "sleep"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "going",
+        "available": true,
+        "filenames": [
+          "going.mp4"
+        ]
+      },
+      {
+        "token": "sleep",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "going"
+    ],
+    "missing_tokens": [
+      "i",
+      "sleep"
+    ]
+  },
+  {
+    "id": 35,
+    "text": "I am feeling tired.",
+    "isl_tokens": [
+      "i",
+      "feeling",
+      "tired"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "feeling",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "tired",
+        "available": true,
+        "filenames": [
+          "tired.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "tired"
+    ],
+    "missing_tokens": [
+      "i",
+      "feeling"
+    ]
+  },
+  {
+    "id": 36,
+    "text": "I forgot my keys.",
+    "isl_tokens": [
+      "i",
+      "forgot",
+      "my",
+      "keys"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "forgot",
+        "available": true,
+        "filenames": [
+          "forgot.mp4"
+        ]
+      },
+      {
+        "token": "my",
+        "available": true,
+        "filenames": [
+          "my.mp4"
+        ]
+      },
+      {
+        "token": "keys",
+        "available": true,
+        "filenames": [
+          "keys.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "forgot",
+      "my",
+      "keys"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 37,
+    "text": "I am running late.",
+    "isl_tokens": [
+      "i",
+      "run_late"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "run_late",
+        "available": true,
+        "filenames": [
+          "running_late.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "run_late"
+    ],
+    "missing_tokens": [
+      "i"
+    ]
+  },
+  {
+    "id": 38,
+    "text": "I need to charge my phone.",
+    "isl_tokens": [
+      "i",
+      "need",
+      "to",
+      "charge",
+      "my",
+      "phone"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "need",
+        "available": true,
+        "filenames": [
+          "need.mp4"
+        ]
+      },
+      {
+        "token": "to",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "charge",
+        "available": true,
+        "filenames": [
+          "charge.mp4"
+        ]
+      },
+      {
+        "token": "my",
+        "available": true,
+        "filenames": [
+          "my.mp4"
+        ]
+      },
+      {
+        "token": "phone",
+        "available": true,
+        "filenames": [
+          "phone.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "need",
+      "charge",
+      "my",
+      "phone"
+    ],
+    "missing_tokens": [
+      "i",
+      "to"
+    ]
+  },
+  {
+    "id": 39,
+    "text": "I have many things to do.",
+    "isl_tokens": [
+      "i",
+      "have",
+      "many",
+      "things",
+      "to",
+      "do"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "have",
+        "available": true,
+        "filenames": [
+          "have.mp4"
+        ]
+      },
+      {
+        "token": "many",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "things",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "to",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "do",
+        "available": false,
+        "filenames": []
+      }
+    ],
+    "found_tokens": [
+      "have"
+    ],
+    "missing_tokens": [
+      "i",
+      "many",
+      "things",
+      "to",
+      "do"
+    ]
+  },
+  {
+    "id": 40,
+    "text": "Let’s take a break.",
+    "isl_tokens": [
+      "lets",
+      "take",
+      "a",
+      "break"
+    ],
+    "tokens": [
+      {
+        "token": "lets",
+        "available": true,
+        "filenames": [
+          "lets.mp4"
+        ]
+      },
+      {
+        "token": "take",
+        "available": true,
+        "filenames": [
+          "take.mp4"
+        ]
+      },
+      {
+        "token": "a",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "break",
+        "available": true,
+        "filenames": [
+          "break.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "lets",
+      "take",
+      "break"
+    ],
+    "missing_tokens": [
+      "a"
+    ]
+  },
+  
+  {
+    "id": 149,
+    "text": "Call the police.",
+    "isl_tokens": [
+      "call",
+      "police"
+    ],
+    "tokens": [
+      {
+        "token": "call",
+        "available": true,
+        "filenames": [
+          "call.mp4"
+        ]
+      },
+      {
+        "token": "police",
+        "available": true,
+        "filenames": [
+          "police.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "call",
+      "police"
+    ],
+    "missing_tokens": []
+  },
+  {
+    "id": 150,
+    "text": "I am safe now.",
+    "isl_tokens": [
+      "i",
+      "safe",
+      "now"
+    ],
+    "tokens": [
+      {
+        "token": "i",
+        "available": false,
+        "filenames": []
+      },
+      {
+        "token": "safe",
+        "available": true,
+        "filenames": [
+          "safe.mp4"
+        ]
+      },
+      {
+        "token": "now",
+        "available": true,
+        "filenames": [
+          "now.mp4"
+        ]
+      }
+    ],
+    "found_tokens": [
+      "safe"
+    ],
+    "missing_tokens": [
+      "i",
+      "now"
+    ]
+  }
+]

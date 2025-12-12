@@ -1,0 +1,20 @@
+// frontend/src/socket.js
+import { io } from 'socket.io-client';
+
+let socket = null;
+
+export function getSocket() {
+  if (socket) return socket;
+
+  const envUrl = process.env.REACT_APP_SOCKET_URL;
+  const defaultPort = process.env.REACT_APP_BACKEND_PORT || '5000';
+  const url = envUrl || `${window.location.protocol}//${window.location.hostname}:${defaultPort}`;
+
+  socket = io(url, { transports: ['websocket', 'polling'] });
+
+  socket.on('connect', () => console.debug('[socket] connected', socket.id, '->', url));
+  socket.on('connect_error', (err) => console.error('[socket] connect_error', err && err.message ? err.message : err));
+  socket.on('disconnect', (reason) => console.debug('[socket] disconnected', reason));
+
+  return socket;
+}

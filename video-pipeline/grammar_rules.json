@@ -1,0 +1,26 @@
+{
+  "description": "Default heuristic grammar rules for producing suggested token orders for ISL glosses. Edit as needed.",
+  "rules": [
+    {
+      "name": "wh_to_end",
+      "type": "move_any_to_end",
+      "match_any": ["what", "where", "when", "who", "why", "which", "how"]
+    },
+    {
+      "name": "polite_topic_first",
+      "type": "move_any_to_start",
+      "match_any": ["please", "thanks", "thank", "sorry"]
+    },
+    {
+      "name": "question_marker",
+      "type": "append_marker_for_question",
+      "match_any": ["do", "does", "did", "will", "can", "are", "is", "am", "have", "what", "where", "when", "who", "why", "which", "how"]
+    },
+    {
+      "name": "negation_before_verb",
+      "type": "move_neg_before_verb",
+      "negatives": ["not", "dont", "don't", "no"],
+      "aux_verbs": ["am", "is", "are", "was", "were", "have", "has", "do", "does", "did", "will", "can", "could", "should", "would", "want", "need"]
+    }
+  ]
+}

@@ -1,43 +1,34 @@
+// backend/routes/videos.js
 const express = require('express');
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+const getPool = require('../config/db');
+const { getPresignedGetUrl, getPresignedPutUrl } = require('../lib/r2');
 
 router.get('/:id/presign', async (req, res) => {
   try {
     const videoId = req.params.id;
-
-    // 1. Fetch DB record for this video
-    const pool = require('../config/db')();
-    const result = await pool.query(
-      'SELECT s3_key FROM videos WHERE id = $1 LIMIT 1',
-      [videoId]
-    );
-
-    if (!result.rows.length) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
-
-    const filePath = result.rows[0].s3_key; // example: "videos/myfile.mp4"
-
-    // 2. Generate signed URL (valid for 2 hours)
-    const { data, error } = await supabase
-      .storage
-      .from(process.env.SUPABASE_BUCKET)
-      .createSignedUrl(filePath, 60 * 120); // 120 minutes
-
-    if (error) {
-      console.error('Signed URL error:', error);
-      return res.status(500).json({ message: 'Failed to create signed URL' });
-    }
-
-    return res.json({ url: data.signedUrl });
+    const pool = getPool();
+    const { rows } = await pool.query('SELECT s3_key FROM videos WHERE id = $1 LIMIT 1', [videoId]);
+    if (!rows.length) return res.status(404).json({ message: 'Video not found' });
+    const key = rows[0].s3_key;
+    if (!key) return res.status(404).json({ message: 'No storage key for video' });
+    const url = await getPresignedGetUrl(key, 60 * 60 * 2); // 2 hours
+    res.json({ url, key });
   } catch (err) {
-    console.error('presign route error:', err);
+    console.error('videos/presign error', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.get('/presign-put', async (req, res) => {
+  try {
+    const key = req.query.key;
+    if (!key) return res.status(400).json({ message: 'key query param required' });
+    const contentType = req.query.contentType || 'video/mp4';
+    const url = await getPresignedPutUrl(key, 60, contentType);
+    res.json({ url, key });
+  } catch (err) {
+    console.error('videos/presign-put error', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
