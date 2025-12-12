@@ -1,179 +1,348 @@
-// frontend/src/components/DuelRoom.jsx
-import React, { useEffect, useRef, useState } from "react";
+// frontend/src/components/DuelRoom.js
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSocket } from "../socket";
 import { useAuth } from "../context/authcontext";
 import { motion, AnimatePresence } from "framer-motion";
 
+/**
+ * DuelRoom.js
+ * Final battle/duel room UI
+ *
+ * Behavior:
+ * - Shows opponent name
+ * - Smooth time bar spanning question card (green -> yellow -> orange -> red)
+ * - Choose options until reveal; after reveal highlight correct / incorrect
+ * - Forfeit modal + intercepting back/navigation to confirm forfeit
+ * - Emits window events 'duel:started' and 'duel:ended' for navbar to listen
+ */
+
 export default function DuelRoom() {
-  const params = useParams();
-  const matchKey = params.matchKey || params.matchId;
+  const { matchKey: paramMatchKey, matchId: paramMatchId } = useParams();
+  const matchId = paramMatchKey || paramMatchId;
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const socketRef = useRef(null);
-  const timerRef = useRef(null);
+  const tickRef = useRef(null);
 
   // UI state
   const [opponent, setOpponent] = useState(null);
-  const [question, setQuestion] = useState(null);
+  const [question, setQuestion] = useState(null); // { idx, statement, options, endsAt, totalMs }
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [correctIndex, setCorrectIndex] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(0);
   const [revealed, setRevealed] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [progress, setProgress] = useState(1);
   const [matchEnded, setMatchEnded] = useState(false);
   const [matchResult, setMatchResult] = useState(null);
   const [showForfeitModal, setShowForfeitModal] = useState(false);
   const [opponentAnsweredPulse, setOpponentAnsweredPulse] = useState(false);
+  const [joiningError, setJoiningError] = useState(null);
 
-  function safeClearTimer() {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
+  // helpers
+  function safeClearTick() {
+    if (tickRef.current) {
+      clearInterval(tickRef.current);
+      tickRef.current = null;
     }
   }
 
+  // -----------------------
+  // Socket setup
+  // -----------------------
   useEffect(() => {
-    const socket = getSocket();
-    socketRef.current = socket;
+    const sock = getSocket();
+    socketRef.current = sock;
 
-    const onOpponent = ({ opponent: opp } = {}) => {
-      if (opp) setOpponent(opp);
-    };
+    function onOpponent(payload = {}) {
+      if (payload.opponent) {
+        setOpponent(payload.opponent);
+      } else if (payload.user) {
+        setOpponent(payload.user);
+      }
+    }
 
-    const onUserJoined = ({ user: u } = {}) => {
-      if (!u) return;
-      if (u.userId && u.userId !== user.id) setOpponent(u);
-    };
+    function onUserJoined(payload = {}) {
+      const u = payload.user || payload;
+      if (u && String(u.userId || u.id) !== String(user?.id)) {
+        setOpponent(u);
+      }
+    }
 
-    const onQuestion = (payload = {}) => {
+    function onQuestion(payload = {}) {
       if (!payload) return;
-      // animate transition by replacing question state; AnimatePresence will animate
-      setQuestion({ idx: payload.idx, statement: payload.statement, options: payload.options });
+      const now = Date.now();
+      const endsAt = payload.endsAt || (now + (payload.durationSeconds ? payload.durationSeconds * 1000 : 10000));
+      const totalMs = Math.max(100, endsAt - now);
+
+      setQuestion({
+        idx: payload.idx,
+        statement: payload.statement,
+        options: payload.options || [],
+        endsAt,
+        totalMs,
+      });
+
+      // reset selection state for new question
       setSelectedIndex(null);
       setCorrectIndex(null);
       setRevealed(false);
 
-      // sync timer
-      safeClearTimer();
-      const tick = () => {
-        const left = Math.max(0, Math.ceil((payload.endsAt - Date.now()) / 1000));
-        setTimeLeft(left);
-        if (left <= 0 && timerRef.current) {
-          clearInterval(timerRef.current);
-          timerRef.current = null;
-        }
-      };
-      tick();
-      timerRef.current = setInterval(tick, 250);
-    };
+      // announce match active (useful for navbar)
+      try {
+        window.dispatchEvent(new CustomEvent("duel:started", { detail: { matchId } }));
+      } catch (err) {
+        // fallback: log
+        console.warn("duel:started dispatch failed", err);
+      }
+    }
 
-    const onPlayerAnswered = ({ userId } = {}) => {
-      if (!userId) return;
-      if (String(userId) !== String(user.id)) {
-        // pulse opponent indicator briefly
+    function onPlayerAnswered(payload = {}) {
+      const uid = payload.userId || payload.user?.id;
+      if (!uid) return;
+      if (String(uid) !== String(user?.id)) {
         setOpponentAnsweredPulse(true);
         setTimeout(() => setOpponentAnsweredPulse(false), 700);
       }
-    };
+    }
 
-    const onReveal = ({ idx, correctIndex: ci, answers } = {}) => {
-      safeClearTimer();
+    function onReveal(payload = {}) {
+      // reveal correct/wrong
+      safeClearTick();
       setRevealed(true);
-      setCorrectIndex(typeof ci === "number" ? ci : null);
-    };
-
-    const onMatchEnd = ({ result } = {}) => {
-      safeClearTimer();
-      setMatchEnded(true);
-      setMatchResult(result || {});
-
-      if (result && result.youForfeited) {
-        setTimeout(() => navigate("/", { replace: true }), 150);
-        return;
+      if (typeof payload.correctIndex === "number") {
+        setCorrectIndex(payload.correctIndex);
+      } else if (typeof payload.correct === "number") {
+        setCorrectIndex(payload.correct);
       }
-    };
+      // update scores if included (not shown in UI during match)
+      if (payload.scores) {
+        setMatchResult((prev) => ({ ...(prev || {}), scores: payload.scores }));
+      }
+    }
 
-    socket.on("duel:opponent", onOpponent);
-    socket.on("duel:user-joined", onUserJoined);
-    socket.on("duel:question", onQuestion);
-    socket.on("duel:player-answered", onPlayerAnswered);
-    socket.on("duel:reveal", onReveal);
-    socket.on("duel:match-end", onMatchEnd);
+    function onMatchEnd(payload = {}) {
+      safeClearTick();
+      setMatchEnded(true);
+      setMatchResult(payload.result || payload || {});
+      // announce ended so navbar stops prompting
+      try {
+        window.dispatchEvent(new CustomEvent("duel:ended", { detail: { matchId, result: payload.result || payload } }));
+      } catch (err) {
+        console.warn("duel:ended dispatch failed", err);
+      }
 
+      // if server says local user forfeited, route home
+      if ((payload.result && payload.result.youForfeited) || payload.youForfeited) {
+        setTimeout(() => navigate("/", { replace: true }), 150);
+      }
+    }
+
+    // socket listeners
     try {
-      socket.emit("duel:join-room", { matchKey, user });
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn("duel:join-room emit failed", e);
+      sock.on("duel:opponent", onOpponent);
+      sock.on("duel:user-joined", onUserJoined);
+      sock.on("duel:question", onQuestion);
+      sock.on("duel:player-answered", onPlayerAnswered);
+      sock.on("duel:reveal", onReveal);
+      sock.on("duel:match-end", onMatchEnd);
+    } catch (err) {
+      console.warn("socket.on failed", err);
+    }
+
+    // join the match room
+    try {
+      sock.emit("duel:join-room", { matchKey: matchId, matchId, user: { id: user?.id, name: user?.name } });
+    } catch (err) {
+      console.warn("duel:join-room emit failed", err);
+      setJoiningError("Socket join failed");
     }
 
     return () => {
-      safeClearTimer();
+      safeClearTick();
       try {
-        socket.off("duel:opponent", onOpponent);
-        socket.off("duel:user-joined", onUserJoined);
-        socket.off("duel:question", onQuestion);
-        socket.off("duel:player-answered", onPlayerAnswered);
-        socket.off("duel:reveal", onReveal);
-        socket.off("duel:match-end", onMatchEnd);
-      } catch (e) {
-        /* ignore cleanup errors */
+        sock.off("duel:opponent", onOpponent);
+        sock.off("duel:user-joined", onUserJoined);
+        sock.off("duel:question", onQuestion);
+        sock.off("duel:player-answered", onPlayerAnswered);
+        sock.off("duel:reveal", onReveal);
+        sock.off("duel:match-end", onMatchEnd);
+      } catch (err) {
+        console.warn("error removing socket listeners", err);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [matchKey, user && user.id, navigate]);
+  }, [matchId, user && user.id]);
 
-  // chooseOption allowed until reveal
+  // -----------------------
+  // Timer effect — smooth progress & timeLeft
+  // -----------------------
+  useEffect(() => {
+    safeClearTick();
+    if (!question) {
+      setTimeLeft(0);
+      setProgress(1);
+      return;
+    }
+
+    function tick() {
+      const now = Date.now();
+      const remainingMs = Math.max(0, (question.endsAt || 0) - now);
+      const frac = Math.max(0, Math.min(1, remainingMs / (question.totalMs || 1)));
+      setProgress(frac);
+      setTimeLeft(Math.ceil(remainingMs / 1000));
+      if (remainingMs <= 0) {
+        safeClearTick();
+      }
+    }
+
+    tick();
+    tickRef.current = setInterval(tick, 100);
+
+    return () => {
+      safeClearTick();
+    };
+  }, [question]);
+
+  // -----------------------
+  // Choose option (allowed until reveal)
+  // -----------------------
   function chooseOption(i) {
     if (!question || revealed || matchEnded) return;
     setSelectedIndex(i);
     try {
       const sock = socketRef.current;
       if (sock && sock.connected) {
-        sock.emit("duel:answer", { matchKey, matchId: matchKey, user: { id: user.id }, selectedIndex: i });
+        sock.emit("duel:answer", {
+          matchKey: matchId,
+          matchId,
+          user: { id: user?.id, name: user?.name },
+          selectedIndex: i,
+        });
       }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn("duel:answer emit failed", e);
+    } catch (err) {
+      console.warn("duel:answer emit failed", err);
     }
   }
 
-  // confirm forfeit: emit then redirect forfeiter immediately
-  function confirmForfeit() {
+  // -----------------------
+  // Forfeit flows
+  // -----------------------
+  function doForfeitAndLeave() {
     try {
       const sock = socketRef.current;
       if (sock && sock.connected) {
-        sock.emit("duel:forfeit", { matchKey, matchId: matchKey, userId: user.id });
+        sock.emit("duel:forfeit", { matchKey: matchId, matchId, userId: user?.id });
       }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.warn("duel:forfeit emit failed", e);
+    } catch (err) {
+      console.warn("duel:forfeit emit failed", err);
     } finally {
       navigate("/", { replace: true });
     }
   }
 
-  // Motion variants
-  const cardVariants = {
-    initial: { opacity: 0, y: 12, scale: 0.995 },
-    animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.28, ease: "easeOut" } },
-    exit: { opacity: 0, y: -8, scale: 0.995, transition: { duration: 0.18, ease: "easeIn" } },
-  };
+  function confirmForfeit() {
+    setShowForfeitModal(false);
+    doForfeitAndLeave();
+  }
 
-  const optionTap = { scale: 0.97 };
+  // -----------------------
+  // Intercept back/popstate and beforeunload
+  // -----------------------
+  useEffect(() => {
+    if (matchEnded) return undefined;
+
+    try {
+      window.history.pushState({ duelGuard: true }, "");
+    } catch (err) {
+      console.warn("pushState failed", err);
+    }
+
+    const onPop = () => {
+      if (matchEnded) return;
+      const leave = window.confirm("Leave match? This will forfeit the match and you will lose. Do you want to leave?");
+      if (leave) {
+        doForfeitAndLeave();
+      } else {
+        try {
+          window.history.pushState({ duelGuard: true }, "");
+        } catch (err) {
+          console.warn("pushState on cancel failed", err);
+        }
+      }
+    };
+
+    const onBeforeUnload = (e) => {
+      if (matchEnded) return;
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
+    };
+
+    window.addEventListener("popstate", onPop);
+    window.addEventListener("beforeunload", onBeforeUnload);
+
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("beforeunload", onBeforeUnload);
+    };
+  }, [matchEnded]);
+
+  // -----------------------
+  // Time bar color interpolation
+  // -----------------------
+  function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    return { r: parseInt(h.substring(0, 2), 16), g: parseInt(h.substring(2, 4), 16), b: parseInt(h.substring(4, 6), 16) };
+  }
+  function rgbToHex({ r, g, b }) {
+    const toHex = (n) => n.toString(16).padStart(2, "0");
+    return `#${toHex(Math.round(r))}${toHex(Math.round(g))}${toHex(Math.round(b))}`;
+  }
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+  function lerpColor(hexA, hexB, t) {
+    const A = hexToRgb(hexA);
+    const B = hexToRgb(hexB);
+    return rgbToHex({ r: lerp(A.r, B.r, t), g: lerp(A.g, B.g, t), b: lerp(A.b, B.b, t) });
+  }
+
+  const STOP_GREEN = "#10b981";
+  const STOP_YELLOW = "#f59e0b";
+  const STOP_ORANGE = "#f97316";
+  const STOP_RED = "#ef4444";
+
+  const barColor = useMemo(() => {
+    const p = Math.max(0, Math.min(1, progress));
+    const t = 1 - p; // 0 => full time, 1 => exhausted
+    if (t <= 0.333333) {
+      const local = t / 0.333333;
+      return lerpColor(STOP_GREEN, STOP_YELLOW, local);
+    } else if (t <= 0.666666) {
+      const local = (t - 0.333333) / 0.333333;
+      return lerpColor(STOP_YELLOW, STOP_ORANGE, local);
+    }
+    const local = (t - 0.666666) / 0.333333;
+    return lerpColor(STOP_ORANGE, STOP_RED, local);
+  }, [progress]);
+
+  // -----------------------
+  // Render helpers
+  // -----------------------
+  const optionTap = { scale: 0.98 };
   const optionHover = { y: -4 };
 
   function renderOptions() {
     if (!question) return null;
-
     return (
       <div className="space-y-3">
         {question.options.map((opt, i) => {
-          // decide styles for reveal / selection
           let base = "p-3 rounded border select-none ";
           let revealBg = "bg-white";
           let border = "border-gray-200";
+
           if (!revealed) {
             if (selectedIndex === i) {
               revealBg = "bg-blue-50";
@@ -189,7 +358,6 @@ export default function DuelRoom() {
             }
           }
 
-          // motion style for reveal: correct pulses
           const animateProps = {};
           if (revealed && typeof correctIndex === "number" && i === correctIndex) {
             animateProps.animate = { scale: [1, 1.03, 1], transition: { duration: 0.45 } };
@@ -203,7 +371,9 @@ export default function DuelRoom() {
               role="button"
               tabIndex={0}
               onClick={() => chooseOption(i)}
-              onKeyDown={(e) => { if (e.key === "Enter") chooseOption(i); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") chooseOption(i);
+              }}
               initial={false}
               whileTap={optionTap}
               whileHover={!revealed ? optionHover : undefined}
@@ -213,14 +383,8 @@ export default function DuelRoom() {
             >
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-900">{opt}</div>
-                {/* small badge when this option is currently selected (before reveal) */}
                 {!revealed && selectedIndex === i && (
-                  <motion.span
-                    initial={{ opacity: 0, x: 6 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.18 }}
-                    className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700"
-                  >
+                  <motion.span initial={{ opacity: 0, x: 6 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.18 }} className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700">
                     Selected
                   </motion.span>
                 )}
@@ -236,16 +400,9 @@ export default function DuelRoom() {
     if (!showForfeitModal) return null;
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <motion.div className="absolute inset-0 bg-black/50" onClick={() => setShowForfeitModal(false)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} />
         <motion.div
-          className="absolute inset-0 bg-black/50"
-          onClick={() => setShowForfeitModal(false)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-        <motion.div
-          className="bg-white rounded-lg p-6 w-full max-w-sm z-50 relative"
-          style={{ zIndex: 1000 }}
+          className="bg-white rounded-lg p-6 w-full max-w-sm z-50 relative shadow-lg"
           role="dialog"
           aria-modal="true"
           initial={{ scale: 0.96, opacity: 0, y: 8 }}
@@ -254,22 +411,12 @@ export default function DuelRoom() {
           transition={{ duration: 0.18 }}
         >
           <h3 className="text-lg font-semibold mb-2">Forfeit match?</h3>
-          <p className="text-sm text-gray-700 mb-4">
-            Are you sure you want to forfeit? This will end the match and you will lose.
-          </p>
-
+          <p className="text-sm text-gray-700 mb-4">Are you sure you want to forfeit? This will end the match and you will lose.</p>
           <div className="flex justify-end gap-2">
-            <button
-              onClick={() => setShowForfeitModal(false)}
-              className="px-4 py-2 border rounded"
-            >
+            <button onClick={() => setShowForfeitModal(false)} className="px-4 py-2 border rounded bg-white">
               Cancel
             </button>
-
-            <button
-              onClick={() => confirmForfeit()}
-              className="px-4 py-2 bg-red-600 text-white rounded"
-            >
+            <button onClick={() => confirmForfeit()} className="px-4 py-2 bg-red-600 text-white rounded">
               Yes, Forfeit
             </button>
           </div>
@@ -283,12 +430,7 @@ export default function DuelRoom() {
 
     if (matchResult && matchResult.forfeit && !matchResult.youForfeited) {
       return (
-        <motion.div
-          className="mt-6 p-6 bg-white rounded shadow text-center"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-        >
+        <motion.div className="mt-6 p-6 bg-white rounded shadow text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
           <h2 className="text-2xl font-bold text-green-700">You WON — Opponent forfeited</h2>
           <p className="mt-2 text-sm text-gray-600">{matchResult.message || "Opponent forfeited."}</p>
           <div className="mt-4">
@@ -300,23 +442,22 @@ export default function DuelRoom() {
 
     if (matchEnded) {
       const winner = matchResult?.winner;
-      const youWon = winner && String(winner) === String(user.id);
+      const youWon = winner && String(winner) === String(user?.id);
       return (
-        <motion.div className="mt-6 p-6 bg-white rounded shadow text-center"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}>
-          <h2 className="text-2xl font-bold">{youWon ? "You Won!" : (winner === 'tie' ? "It's a tie!" : "You Lost")}</h2>
+        <motion.div className="mt-6 p-6 bg-white rounded shadow text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
+          <h2 className="text-2xl font-bold">{youWon ? "You Won!" : winner === "tie" ? "It's a tie!" : "You Lost"}</h2>
           <div className="mt-4">
             <button onClick={() => navigate("/")} className="px-4 py-2 bg-indigo-600 text-white rounded">Return Home</button>
           </div>
         </motion.div>
       );
     }
-
     return null;
   }
 
+  // -----------------------
+  // Render main
+  // -----------------------
   return (
     <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
@@ -334,32 +475,40 @@ export default function DuelRoom() {
             )}
           </h2>
 
-          <div>
+          <div className="flex items-center gap-3">
             <button onClick={() => setShowForfeitModal(true)} className="px-3 py-2 bg-red-600 text-white rounded">Forfeit</button>
           </div>
         </div>
 
         <div className="mt-3 text-sm text-gray-700 flex items-center justify-between">
-          <div>
-            Opponent: <span className="font-medium">{opponent ? opponent.name : "Waiting..."}</span>
-          </div>
+          <div>Opponent: <span className="font-medium">{opponent ? opponent.name : "Waiting..."}</span></div>
           <div className="text-xs text-gray-500">Time left: <span className="font-medium">{timeLeft}s</span></div>
         </div>
 
         <div className="mt-6">
           <AnimatePresence mode="wait" initial={false}>
-            {/* Animate presence of question card when question changes */}
             <motion.div
               key={question ? `q-${question.idx}` : "q-waiting"}
-              variants={cardVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              initial={{ opacity: 0, y: 12, scale: 0.995 }}
+              animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 0.28, ease: "easeOut" } }}
+              exit={{ opacity: 0, y: -8, scale: 0.995, transition: { duration: 0.18, ease: "easeIn" } }}
               className="mt-3 p-4 border rounded bg-white shadow-sm"
             >
-              <div className="text-lg font-medium mb-3">
-                {question ? question.statement : "Waiting for question..."}
+              <div className="mb-3">
+                <div className="w-full rounded-full h-6 overflow-hidden border border-gray-200 bg-gray-200">
+                  <motion.div
+                    className="h-6"
+                    initial={false}
+                    animate={{ width: `${Math.max(0, Math.min(1, progress)) * 100}%`, backgroundColor: barColor }}
+                    transition={{ ease: "linear", duration: 0.12 }}
+                    style={{ minWidth: "2%" }}
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="mt-1 text-xs text-gray-500">Time remaining</div>
               </div>
+
+              <div className="text-lg font-medium my-3">{question ? question.statement : "Waiting for question..."}</div>
 
               {renderOptions()}
 
@@ -372,18 +521,11 @@ export default function DuelRoom() {
           </AnimatePresence>
         </div>
 
-        {/* end screen (forfeit/win/loss) */}
         {renderEndScreen()}
-
         {renderForfeitModal()}
+
+        {joiningError && <div className="mt-4 text-red-600">Error: {joiningError}</div>}
       </div>
     </div>
   );
 }
-
-// NOTE: motion variants declared outside component scope (keeps them stable)
-const cardVariants = {
-  initial: { opacity: 0, y: 12, scale: 0.995 },
-  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.28, ease: "easeOut" } },
-  exit: { opacity: 0, y: -8, scale: 0.995, transition: { duration: 0.18, ease: "easeIn" } },
-};
