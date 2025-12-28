@@ -262,26 +262,50 @@ module.exports = function initDuel(io) {
     });
 
     // forfeit handler
+    // 🔒 IDEMPOTENT FORFEIT HANDLER — FINAL
     socket.on('duel:forfeit', ({ matchKey, matchId, userId } = {}) => {
       const id = matchId || matchKey || socket.matchId;
       if (!id) return;
+
       const match = matches[id];
-      console.log('[duel] forfeit received', id, userId);
+
+      // ✅ Match already ended → ignore silently
       if (!match) return;
 
-      const uid = userId || (socket && socket.userId) || null;
-      const other = match.players.find(p => String(p.userId) !== String(uid));
-      const winnerId = other ? other.userId : null;
+      // 🔒 HARD GUARD: prevent double-forfeit
+      if (match.status === 'ended') return;
 
-      // notify remaining players they won (forfeit = true)
-      socket.to(id).emit('duel:match-end', { result: { scores: match.scores, winner: winnerId, forfeit: true, message: 'Opponent forfeited' } });
+      match.status = 'ended';
 
-      // notify forfeiter directly
-      socket.emit('duel:match-end', { result: { scores: match.scores, winner: winnerId, youForfeited: true, message: 'You forfeited' } });
+      const uid = String(userId || socket.userId || '');
+      const opponent = match.players.find(p => String(p.userId) !== uid);
+      const winnerId = opponent ? opponent.userId : null;
+
+      // Notify opponent
+      socket.to(id).emit('duel:match-end', {
+        result: {
+          scores: match.scores,
+          winner: winnerId,
+          forfeit: true,
+          message: 'Opponent forfeited',
+        },
+      });
+
+      // Notify forfeiter
+      socket.emit('duel:match-end', {
+        result: {
+          scores: match.scores,
+          winner: winnerId,
+          youForfeited: true,
+          forfeit: true,
+          message: 'You forfeited',
+        },
+      });
 
       clearTimers(match);
       delete matches[id];
     });
+
 
     // socket disconnect => treat as forfeit for remaining
     socket.on('disconnect', () => {

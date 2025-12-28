@@ -69,39 +69,41 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const res = await axios.post('/api/auth/register', userData);
-      const newToken = res.data.token;
-      applyToken(newToken);
 
-      const fetched = await loadUser();
-      if (!fetched && res.data.user) setUser(res.data.user);
+      const { token: newToken, user } = res.data;
+
+      applyToken(newToken);
+      setUser(user); // ✅ DIRECT
 
       return {
         success: true,
-        user: res.data.user,
+        user,
         token: newToken,
       };
     } catch (err) {
       return {
         success: false,
-        message:
-          err.response?.data?.message || 'Registration failed',
+        message: err.response?.data?.message || 'Registration failed',
       };
     }
   };
-
+  
   const login = async (credentials) => {
     try {
       const res = await axios.post('/api/auth/login', credentials);
-      const newToken = res.data.token;
+
+      const { token: newToken, user } = res.data;
+
+      if (!newToken || !user) {
+        throw new Error('Invalid login response');
+      }
 
       applyToken(newToken);
-
-      const fetched = await loadUser();
-      if (!fetched && res.data.user) setUser(res.data.user);
+      setUser(user); // ✅ DIRECTLY SET USER
 
       return {
         success: true,
-        user: res.data.user,
+        user,
         token: newToken,
       };
     } catch (err) {
@@ -111,6 +113,7 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
+
 
   const logout = () => {
     applyToken(null);

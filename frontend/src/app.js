@@ -54,6 +54,7 @@ function PrivateRoute({ children }) {
 // -----------------------------
 const AuthPage = () => {
   const [isLogin, setIsLogin] = React.useState(true);
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -83,7 +84,7 @@ const AppContent = () => {
 
   return (
     <Routes>
-      {/* Dashboard when logged in, AuthPage when not */}
+      {/* Root */}
       <Route path="/" element={<AuthOrDashboard />} />
 
       {/* Courses */}
@@ -104,10 +105,13 @@ const AppContent = () => {
         }
       />
 
-      {/* ISL Legacy Player */}
-      <Route path="/player/legacy" element={<ISLCoursePlayer apiBase="/api" />} />
+      {/* ISL legacy player */}
+      <Route
+        path="/player/legacy"
+        element={<ISLCoursePlayer apiBase="/api" />}
+      />
 
-      {/* Duel System */}
+      {/* Duel system */}
       <Route
         path="/duel/lobby"
         element={
@@ -116,7 +120,6 @@ const AppContent = () => {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/duel/queue/:queueId"
         element={
@@ -126,7 +129,7 @@ const AppContent = () => {
         }
       />
 
-      {/* IMPORTANT — updated from matchId → matchKey */}
+      {/* IMPORTANT — matchKey route */}
       <Route
         path="/duel/room/:matchKey"
         element={
@@ -136,7 +139,7 @@ const AppContent = () => {
         }
       />
 
-      {/* Live schedule */}
+      {/* Live events / schedule */}
       <Route
         path="/live/schedule"
         element={
@@ -148,31 +151,36 @@ const AppContent = () => {
 
       {/* Catch-all */}
       <Route path="*" element={<Navigate to="/" replace />} />
+      
     </Routes>
   );
 };
 
 // -----------------------------
-// CHOOSE AUTH/DASHBOARD
+// AUTH OR DASHBOARD
 // -----------------------------
 function AuthOrDashboard() {
   const { user, loading } = useAuth();
-  if (loading)
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         Loading…
       </div>
     );
+  }
+
   return user ? <Dashboard /> : <AuthPage />;
 }
 
 // -----------------------------
-// MAIN APP WRAPPER
+// MAIN APP
 // -----------------------------
 function App() {
   return (
     <Router>
       <AuthProvider>
+        {/* Navbar always mounted (required for duel exit handling) */}
         <Navbar />
         <AppContent />
       </AuthProvider>

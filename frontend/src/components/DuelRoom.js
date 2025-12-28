@@ -126,18 +126,19 @@ export default function DuelRoom() {
       safeClearTick();
       setMatchEnded(true);
       setMatchResult(payload.result || payload || {});
-      // announce ended so navbar stops prompting
+      setShowForfeitModal(false); // ✅ FORCE-CLOSE MODAL
+
       try {
-        window.dispatchEvent(new CustomEvent("duel:ended", { detail: { matchId, result: payload.result || payload } }));
+        window.dispatchEvent(
+          new CustomEvent("duel:ended", {
+            detail: { matchId, result: payload.result || payload },
+          })
+        );
       } catch (err) {
         console.warn("duel:ended dispatch failed", err);
       }
-
-      // if server says local user forfeited, route home
-      if ((payload.result && payload.result.youForfeited) || payload.youForfeited) {
-        setTimeout(() => navigate("/", { replace: true }), 150);
-      }
     }
+
 
     // socket listeners
     try {
@@ -476,8 +477,15 @@ export default function DuelRoom() {
           </h2>
 
           <div className="flex items-center gap-3">
-            <button onClick={() => setShowForfeitModal(true)} className="px-3 py-2 bg-red-600 text-white rounded">Forfeit</button>
-          </div>
+            {!matchEnded && (
+              <button
+                onClick={() => setShowForfeitModal(true)}
+                className="px-3 py-2 bg-red-600 text-white rounded"
+              >
+                Forfeit
+              </button>
+            )}
+        </div>
         </div>
 
         <div className="mt-3 text-sm text-gray-700 flex items-center justify-between">

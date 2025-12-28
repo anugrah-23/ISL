@@ -91,8 +91,7 @@ const CategoryPlayer = () => {
             <div className="flex-1">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h2 className="text-2xl font-semibold">{category.title} — {category.range}</h2>
-                  <div className="text-xs text-gray-400">Source: {category.key}</div>
+                  <h2 className="text-2xl font-semibold">{category.title}</h2>
                 </div>
               </div>
 
@@ -124,10 +123,6 @@ const CategoryPlayer = () => {
                 <div className="ml-4 text-sm text-gray-500">
                   {safeActiveIdx + 1} / {sentences.length}
                 </div>
-              </div>
-
-              <div className="mt-6 text-xs text-gray-400">
-                Source key: {category.key}
               </div>
             </div>
           </div>
