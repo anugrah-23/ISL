@@ -58,6 +58,15 @@ const User = {
   async comparePassword(plain, hashed) {
     return bcrypt.compare(plain, hashed);
   },
+
+  async findByUsername(username) {
+    const pool = getPool();
+    const { rows } = await pool.query(
+      `SELECT id, name FROM isl_users WHERE LOWER(name) = LOWER($1)`,
+      [username.trim()]
+    );
+    return rows[0] || null;
+  },
 };
 
 module.exports = User;

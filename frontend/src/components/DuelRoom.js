@@ -25,6 +25,8 @@ export default function DuelRoom() {
 
   const socketRef = useRef(null);
   const tickRef = useRef(null);
+  const joinedRef = useRef(false);
+
 
   // UI state
   const [opponent, setOpponent] = useState(null);
@@ -153,12 +155,33 @@ export default function DuelRoom() {
     }
 
     // join the match room
-    try {
-      sock.emit("duel:join-room", { matchKey: matchId, matchId, user: { id: user?.id, name: user?.name } });
-    } catch (err) {
-      console.warn("duel:join-room emit failed", err);
-      setJoiningError("Socket join failed");
+    // join the match room (SAFE: wait for socket connection)
+    function joinRoomSafe() {
+      if (joinedRef.current) return;
+      joinedRef.current = true;
+
+      try {
+        sock.emit("duel:join-room", {
+          matchKey: matchId,
+          matchId,
+          user: { id: user?.id, name: user?.name },
+        });
+      } catch (err) {
+        console.warn("duel:join-room emit failed", err);
+        setJoiningError("Socket join failed");
+      }
     }
+
+    if (sock.connected) {
+      joinRoomSafe();
+    } else {
+      const onConnect = () => {
+        joinRoomSafe();
+        sock.off("connect", onConnect);
+      };
+      sock.on("connect", onConnect);
+    }
+
 
     return () => {
       safeClearTick();

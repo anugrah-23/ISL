@@ -24,6 +24,8 @@ import DuelQueue from "./components/DuelQueue";
 import DuelRoom from "./components/DuelRoom";
 
 import LiveSchedule from "./components/LiveQuizRoom";
+import FriendsPage from "./components/FriendsPage";
+
 
 // -----------------------------
 // PRIVATE ROUTE
@@ -149,8 +151,18 @@ const AppContent = () => {
         }
       />
 
+      
+
       {/* Catch-all */}
       <Route path="*" element={<Navigate to="/" replace />} />
+      <Route
+        path="/friends"
+        element={
+          <PrivateRoute>
+            <FriendsPage />
+          </PrivateRoute>
+        }
+      />
       
     </Routes>
   );
