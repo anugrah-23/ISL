@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import { useAuth } from "../context/authcontext";
 import { getSocket } from "../socket";
-import { useNavigate } from "react-router-dom";
 
 export default function FriendsPage() {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const [friends, setFriends] = useState([]);
   const [pending, setPending] = useState([]);
@@ -31,17 +29,6 @@ export default function FriendsPage() {
 
     const socket = getSocket();
 
-    function registerPresence() {
-    socket.emit("friend:register", { userId: user.id });
-    }
-
-    if (socket.connected) {
-    registerPresence();
-    } else {
-    socket.once("connect", registerPresence);
-    }
-
-
     socket.on("friend:presence", ({ userId, online }) => {
       setOnline((prev) => {
         const copy = new Set(prev);
@@ -50,15 +37,10 @@ export default function FriendsPage() {
       });
     });
 
-    socket.on("friend:match:created", ({ matchId }) => {
-      navigate(`/duel/room/${encodeURIComponent(matchId)}`);
-    });
-
     return () => {
       socket.off("friend:presence");
-      socket.off("friend:match:created");
     };
-  }, [user, navigate]);
+  }, [user]);
 
   async function addFriend() {
     if (!username.trim()) return;

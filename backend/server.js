@@ -1,3 +1,4 @@
+// server.js
 require("dotenv").config();
 
 const express = require("express");
@@ -20,15 +21,17 @@ const io = new Server(server, {
 });
 app.set("io", io);
 
-// ---- SOCKET MODULES ----
-require("./sockets/duel")(io);
-require("./sockets/games")(io);
-require("./sockets/battles")(io);
-require("./sockets/liveEvent")(io);
-require("./sockets/matchmaker")(io);
+// ✅ SINGLE CONNECTION HANDLER
+io.on("connection", (socket) => {
+  console.log("[socket] connected", socket.id);
 
-// 🔥 FRIEND MATCH + PRESENCE (single source of truth)
-require("./sockets/friendMatch")(io, onlineUsers);
+  require("./sockets/duel")(io, socket);
+  require("./sockets/games")(io, socket);
+  require("./sockets/battles")(io, socket);
+  require("./sockets/liveEvent")(io, socket);
+  require("./sockets/matchmaker")(io, socket);
+  require("./sockets/friendMatch")(io, socket, onlineUsers);
+});
 
 // ---- ROUTES ----
 app.get("/", (_, res) => res.send("ISL Backend OK"));
@@ -44,8 +47,6 @@ app.use("/api/videos", require("./routes/videos"));
 app.use("/api/stories", require("./routes/stories"));
 app.use("/api/reminders", require("./routes/reminders"));
 app.use("/api/achievements", require("./routes/achievements"));
-
-// ✅ mount ONCE
 app.use("/api/friends", require("./routes/friends"));
 
 const PORT = process.env.PORT || 5000;

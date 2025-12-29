@@ -1,7 +1,7 @@
-// frontend/src/context/authcontext.js
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { getSocket } from "../socket";
 
 const AuthContext = createContext();
 
@@ -66,6 +66,29 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
+  // -------------------------
+  // FRIEND PRESENCE REGISTER
+  // -------------------------
+  useEffect(() => {
+    if (!user) return;
+
+    const socket = getSocket();
+
+    const registerPresence = () => {
+      socket.emit("friend:register", { userId: user.id });
+    };
+
+    if (socket.connected) {
+      registerPresence();
+    } else {
+      socket.once("connect", registerPresence);
+    }
+
+    return () => {
+      socket.off("connect", registerPresence);
+    };
+  }, [user]);
+
   const register = async (userData) => {
     try {
       const res = await axios.post('/api/auth/register', userData);
@@ -73,7 +96,7 @@ export const AuthProvider = ({ children }) => {
       const { token: newToken, user } = res.data;
 
       applyToken(newToken);
-      setUser(user); // ✅ DIRECT
+      setUser(user);
 
       return {
         success: true,
@@ -99,7 +122,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       applyToken(newToken);
-      setUser(user); // ✅ DIRECTLY SET USER
+      setUser(user);
 
       return {
         success: true,
@@ -113,7 +136,6 @@ export const AuthProvider = ({ children }) => {
       };
     }
   };
-
 
   const logout = () => {
     applyToken(null);

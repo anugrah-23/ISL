@@ -1,80 +1,89 @@
-module.exports = function initFriendMatch(io, onlineUsers) {
-  io.on("connection", (socket) => {
-    console.log("[friendMatch] socket connected", socket.id);
+// sockets/friendMatch.js
+module.exports = function initFriendMatch(io, socket, onlineUsers) {
+  console.log("[friendMatch] bound", socket.id);
 
-    // -------------------------
-    // REGISTER PRESENCE
-    // -------------------------
-    socket.on("friend:register", ({ userId }) => {
-      if (!userId) return;
+  // -------------------------
+  // REGISTER PRESENCE
+  // -------------------------
+  socket.on("friend:register", ({ userId }) => {
+    if (!userId) return;
 
-      const uid = String(userId);
-      socket.userId = uid;
+    const uid = String(userId);
+    socket.userId = uid;
 
-      if (!onlineUsers.has(uid)) {
-        onlineUsers.set(uid, new Set());
-        io.emit("friend:presence", { userId: uid, online: true });
-      }
+    // send existing online users
+    for (const [otherUserId] of onlineUsers.entries()) {
+      socket.emit("friend:presence", {
+        userId: otherUserId,
+        online: true,
+      });
+    }
 
-      onlineUsers.get(uid).add(socket.id);
-    });
+    // register self
+    if (!onlineUsers.has(uid)) {
+      onlineUsers.set(uid, new Set());
 
-    // -------------------------
-    // SEND DUEL INVITE
-    // -------------------------
-    socket.on("friend:invite", ({ toUserId }) => {
-      const fromUserId = socket.userId;
-      if (!fromUserId || !toUserId) return;
+      socket.broadcast.emit("friend:presence", {
+        userId: uid,
+        online: true,
+      });
+    }
 
-      const targets = onlineUsers.get(String(toUserId));
-      if (!targets) return;
+    onlineUsers.get(uid).add(socket.id);
+  });
 
-      for (const sid of targets) {
-        io.to(sid).emit("friend:duel-invite", {
-          fromUserId,
-        });
-      }
-    });
+  // -------------------------
+  // SEND DUEL INVITE
+  // -------------------------
+  socket.on("friend:invite", ({ toUserId }) => {
+    const fromUserId = socket.userId;
+    if (!fromUserId || !toUserId) return;
 
-    // -------------------------
-    // ACCEPT DUEL INVITE
-    // -------------------------
-    socket.on("friend:accept-invite", ({ fromUserId }) => {
-      const toUserId = socket.userId;
-      if (!fromUserId || !toUserId) return;
+    const targets = onlineUsers.get(String(toUserId));
+    if (!targets) return;
 
-      const matchKey = `friend_${Date.now()}_${Math.floor(
-        Math.random() * 10000
-      )}`;
+    for (const sid of targets) {
+      io.to(sid).emit("friend:duel-invite", { fromUserId });
+    }
+  });
 
-      const payload = { matchId: matchKey, matchKey };
+  // -------------------------
+  // ACCEPT DUEL INVITE
+  // -------------------------
+  socket.on("friend:accept-invite", ({ fromUserId }) => {
+    const toUserId = socket.userId;
+    if (!fromUserId || !toUserId) return;
 
-      // notify both players
-      const a = onlineUsers.get(String(fromUserId)) || [];
-      const b = onlineUsers.get(String(toUserId)) || [];
+    const matchKey = `friend_${Date.now()}_${Math.floor(
+      Math.random() * 10000
+    )}`;
 
-      for (const sid of a) {
-        io.to(sid).emit("friend:match:created", payload);
-      }
-      for (const sid of b) {
-        io.to(sid).emit("friend:match:created", payload);
-      }
-    });
+    const payload = { matchId: matchKey, matchKey };
 
-    // -------------------------
-    // DISCONNECT
-    // -------------------------
-    socket.on("disconnect", () => {
-      const uid = socket.userId;
-      if (!uid || !onlineUsers.has(uid)) return;
+    for (const sid of onlineUsers.get(String(fromUserId)) || []) {
+      io.to(sid).emit("friend:match:created", payload);
+    }
+    for (const sid of onlineUsers.get(String(toUserId)) || []) {
+      io.to(sid).emit("friend:match:created", payload);
+    }
+  });
 
-      const set = onlineUsers.get(uid);
-      set.delete(socket.id);
+  // -------------------------
+  // DISCONNECT
+  // -------------------------
+  socket.on("disconnect", () => {
+    const uid = socket.userId;
+    if (!uid || !onlineUsers.has(uid)) return;
 
-      if (set.size === 0) {
-        onlineUsers.delete(uid);
-        io.emit("friend:presence", { userId: uid, online: false });
-      }
-    });
+    const set = onlineUsers.get(uid);
+    set.delete(socket.id);
+
+    if (set.size === 0) {
+      onlineUsers.delete(uid);
+      io.emit("friend:presence", {
+        userId: uid,
+        online: false,
+      });
+    }
   });
 };

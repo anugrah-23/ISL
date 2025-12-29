@@ -1,17 +1,23 @@
 // frontend/src/components/DuelLobby.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/authcontext';
-import api from '../services/api';          // ✅ FIX
-import { getSocket } from '../socket';
 
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authcontext";
+import api from "../services/api";
+import { getSocket } from "../socket";
+
+/* ----------------------------------
+   Friend Invite Modal
+---------------------------------- */
 function FriendInviteModal({ open, onClose, onConfirm }) {
-  const [friend, setFriend] = useState('');
+  const [friend, setFriend] = useState("");
+
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+
       <div className="bg-white rounded-lg p-6 z-50 w-full max-w-md">
         <h3 className="text-lg font-semibold mb-2">Play with a friend</h3>
         <p className="text-sm text-gray-600 mb-4">
@@ -29,9 +35,10 @@ function FriendInviteModal({ open, onClose, onConfirm }) {
           <button onClick={onClose} className="px-4 py-2 border rounded">
             Cancel
           </button>
+
           <button
             onClick={() => {
-              if (!friend.trim()) return alert('Enter username');
+              if (!friend.trim()) return alert("Enter username");
               onConfirm(friend.trim());
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded"
@@ -44,81 +51,107 @@ function FriendInviteModal({ open, onClose, onConfirm }) {
   );
 }
 
+/* ----------------------------------
+   Duel Lobby
+---------------------------------- */
 export default function DuelLobby() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const [duration, setDuration] = useState(1);
-  const [mode, setMode] = useState('competitive');
+  const [mode, setMode] = useState("competitive");
   const [playWithFriend, setPlayWithFriend] = useState(false);
   const [friendModalOpen, setFriendModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  /* ----------------------------------
+     Friend Duel Redirect (NO NEW LOGIC)
+  ---------------------------------- */
+  useEffect(() => {
+    const socket = getSocket();
+
+    const onFriendMatchCreated = ({ matchId, matchKey }) => {
+      const mk = matchKey || matchId;
+      if (!mk) return;
+      navigate(`/duel/room/${encodeURIComponent(mk)}`);
+    };
+
+    socket.on("friend:match:created", onFriendMatchCreated);
+
+    return () => {
+      socket.off("friend:match:created", onFriendMatchCreated);
+    };
+  }, [navigate]);
+
+  /* ----------------------------------
+     Join Queue
+  ---------------------------------- */
   async function joinQueue(friendUsername = null) {
     setErrorMsg(null);
 
     if (!user) {
-      setErrorMsg('You must be signed in to join the queue.');
+      setErrorMsg("You must be signed in to join the queue.");
       return;
     }
 
     setLoading(true);
+
     try {
       const payload = {
         userId: user.id,
         username: user.name || user.email || `user_${user.id}`,
-        duration,                    // ✅ number
-        mode,                        // ✅ competitive | friendly
+        duration,
+        mode,
         friendUsername: friendUsername || null,
       };
 
-      // ✅ FIXED API CALL
-      const res = await api.post('/duel/join', payload);
-
+      const res = await api.post("/duel/join", payload);
       const { queueId, matched, match } = res.data;
 
-      // ---- SOCKET QUEUE SUBSCRIBE (UNCHANGED, CORRECT) ----
+      // socket subscribe
       try {
         const socket = getSocket();
+
         if (!socket.connected) {
           await new Promise((resolve) => {
             const onConnect = () => {
-              socket.off('connect', onConnect);
+              socket.off("connect", onConnect);
               clearTimeout(timer);
               resolve();
             };
+
             const timer = setTimeout(() => {
-              socket.off('connect', onConnect);
+              socket.off("connect", onConnect);
               resolve();
             }, 1500);
-            socket.on('connect', onConnect);
+
+            socket.on("connect", onConnect);
           });
         }
 
-        socket.emit('queue:subscribe', {
+        socket.emit("queue:subscribe", {
           queueId,
           settings: { duration, mode },
           userId: user.id,
           username: payload.username,
         });
       } catch (sockErr) {
-        console.warn('[lobby] socket subscribe failed', sockErr);
+        console.warn("[lobby] socket subscribe failed", sockErr);
       }
 
-      // ---- REDIRECT LOGIC ----
+      // redirect
       if (matched && match?.matchKey) {
         navigate(`/duel/room/${encodeURIComponent(match.matchKey)}`);
       } else {
         navigate(`/duel/queue/${encodeURIComponent(queueId)}`);
       }
     } catch (err) {
-      console.error('Failed to join queue:', err);
       const msg =
         err?.response?.data?.message ||
         (err?.response && `Server returned ${err.response.status}`) ||
         err.message ||
-        'Failed to join queue';
+        "Failed to join queue";
 
       setErrorMsg(msg);
     } finally {
@@ -126,6 +159,9 @@ export default function DuelLobby() {
     }
   }
 
+  /* ----------------------------------
+     Render
+  ---------------------------------- */
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
@@ -136,6 +172,7 @@ export default function DuelLobby() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Duration */}
             <div>
               <div className="text-sm text-gray-500 mb-2">Duration</div>
               <div className="flex gap-2">
@@ -145,8 +182,8 @@ export default function DuelLobby() {
                     onClick={() => setDuration(d)}
                     className={`px-4 py-2 rounded ${
                       duration === d
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100'
+                        ? "bg-indigo-600 text-white"
+                        : "bg-gray-100"
                     }`}
                   >
                     {d} min
@@ -155,27 +192,31 @@ export default function DuelLobby() {
               </div>
             </div>
 
+            {/* Mode */}
             <div>
               <div className="text-sm text-gray-500 mb-2">Mode</div>
               <div className="flex gap-2">
-                {['competitive', 'friendly'].map((m) => (
+                {["competitive", "friendly"].map((m) => (
                   <button
                     key={m}
                     onClick={() => setMode(m)}
                     className={`px-4 py-2 rounded ${
                       mode === m
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100'
+                        ? "bg-indigo-600 text-white"
+                        : "bg-gray-100"
                     }`}
                   >
-                    {m === 'competitive' ? 'Competitive' : 'Friendly'}
+                    {m === "competitive" ? "Competitive" : "Friendly"}
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* Friend */}
             <div>
-              <div className="text-sm text-gray-500 mb-2">Play with friend</div>
+              <div className="text-sm text-gray-500 mb-2">
+                Play with friend
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   id="withFriend"
@@ -206,13 +247,13 @@ export default function DuelLobby() {
               disabled={loading}
               className="px-4 py-2 bg-green-600 text-white rounded"
             >
-              {loading ? 'Joining…' : 'Join Queue'}
+              {loading ? "Joining…" : "Join Queue"}
             </button>
 
             <button
               onClick={() => {
                 setDuration(1);
-                setMode('competitive');
+                setMode("competitive");
                 setPlayWithFriend(false);
                 setErrorMsg(null);
               }}
