@@ -278,6 +278,13 @@ export default function Navbar() {
           >
             Courses
           </a>
+          <a
+            href="/practice"
+            onClick={(e) => handleNavClick(e, "/practice")}
+            className="text-sm text-gray-700 hover:underline"
+          >
+            Practice
+          </a>
 
           <a
             href="/duel/lobby"
