@@ -1,4 +1,3 @@
-// server.js
 require("dotenv").config();
 
 const express = require("express");
@@ -9,7 +8,7 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 
-// 🔑 shared online users map
+// shared state
 const onlineUsers = new Map();
 
 app.use(cors());
@@ -21,23 +20,41 @@ const io = new Server(server, {
 });
 app.set("io", io);
 
-// ✅ SINGLE CONNECTION HANDLER
+/**
+ * ======================================================
+ * TYPE A SOCKET MODULES
+ * (self-registering via io.on("connection"))
+ * ======================================================
+ */
+require("./sockets/duel")(io);
+// ❌ DO NOT enable this — causes duplicate matches
+// require("./sockets/matchmaker")(io);
+
+/**
+ * ======================================================
+ * PER-SOCKET CONNECTION HANDLER
+ * ======================================================
+ */
 io.on("connection", (socket) => {
   console.log("[socket] connected", socket.id);
 
-  require("./sockets/duel")(io, socket);
+  /**
+   * ==================================================
+   * TYPE B SOCKET MODULES
+   * (expect socket object)
+   * ==================================================
+   */
+  require("./sockets/friendMatch")(io, socket, onlineUsers);
   require("./sockets/games")(io, socket);
   require("./sockets/battles")(io, socket);
   require("./sockets/liveEvent")(io, socket);
-  require("./sockets/matchmaker")(io, socket);
-  require("./sockets/friendMatch")(io, socket, onlineUsers);
 });
 
 // ---- ROUTES ----
 app.get("/", (_, res) => res.send("ISL Backend OK"));
 
 app.use("/api/auth", require("./routes/auth"));
-app.use("/api/duel", require("./routes/duel"));
+app.use("/api/duel", require("./routes/duel")); // ✅ REST matchmaker
 app.use("/api/games", require("./routes/games"));
 app.use("/api/battles", require("./routes/battles"));
 app.use("/api/content", require("./routes/content"));

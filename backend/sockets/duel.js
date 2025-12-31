@@ -12,33 +12,42 @@
 
 module.exports = function initDuel(io) {
   const matches = {}; // matchId -> match state
+  // backend/sockets/duel.js
 
+  const ALL_QUESTIONS = require("../data/duelQuestions");
   const QUESTION_TIME = 10;   // seconds per question (server authoritative)
   const REVEAL_MS = 2500;     // ms to show reveal before next question
   const TOTAL_QUESTIONS = 5;  // number of questions per match
+  if (!Array.isArray(ALL_QUESTIONS) || ALL_QUESTIONS.length === 0) {
+    throw new Error("[duel] No duel questions loaded");
+  }
 
-  // Sample questions — replace with DB as needed
-  const QUESTIONS = [
-    { statement: "What is the sign for 'Hello'?", options: ["Wave hand", "Touch nose", "Cross arms", "Clap"], answerIndex: 0 },
-    { statement: "Sign for 'Thank you' starts at:", options: ["Chin", "Shoulder", "Forehead", "Chest"], answerIndex: 0 },
-    { statement: "Sign for 'Sorry' uses which hand motion?", options: ["Pat chest", "Wave", "Clap twice", "Point"], answerIndex: 0 },
-    { statement: "Which is the sign for 'Yes'?", options: ["Nod", "Shake head", "Open palm", "Thumbs up"], answerIndex: 0 },
-    { statement: "Which is the sign for 'No'?", options: ["Shake head", "Nod", "Wave", "Tap shoulder"], answerIndex: 0 },
-  ];
+  function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
 
   function ensureMatch(matchId) {
     if (!matches[matchId]) {
+      const selectedQuestions = shuffle(ALL_QUESTIONS).slice(0, TOTAL_QUESTIONS);
+
       matches[matchId] = {
-        players: [],          // array { userId, name, socketId }
-        scores: {},           // userId -> score
+        players: [],
+        scores: {},
         currentQ: 0,
-        answered: {},         // userId -> chosenIndex (mutable until scoring)
+        answered: {},
+        questions: selectedQuestions, // 🔒 frozen per match
         timers: { questionTimer: null, revealTimer: null },
-        status: 'waiting'     // 'waiting' | 'running' | 'ended'
+        status: "waiting",
       };
     }
     return matches[matchId];
   }
+
 
   function clearTimers(match) {
     try { if (match.timers.questionTimer) clearTimeout(match.timers.questionTimer); } catch (e) {}
@@ -68,8 +77,7 @@ module.exports = function initDuel(io) {
       return;
     }
 
-    const qIndex = match.currentQ % QUESTIONS.length;
-    const question = QUESTIONS[qIndex];
+    const question = match.questions[match.currentQ];
     match.answered = {};
 
     const endsAt = Date.now() + QUESTION_TIME * 1000;
@@ -90,7 +98,8 @@ module.exports = function initDuel(io) {
   function scoreRound(matchId) {
     const match = matches[matchId];
     if (!match) return;
-    const question = QUESTIONS[match.currentQ % QUESTIONS.length];
+    const question = match.questions[match.currentQ];
+
 
     for (const p of match.players) {
       const chosen = match.answered[String(p.userId)];
