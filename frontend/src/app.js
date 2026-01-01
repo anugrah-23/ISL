@@ -20,6 +20,7 @@
   import CategoryPlayer from "./components/CategoryPlayer";
   import PracticeCategories from "./components/PracticeCategories";
   import PracticeQuizPage from "./components/PracticeQuizPage";
+  import ISLPracticePlayer from "./components/ISLPracticePlayer";
 
   import DuelLobby from "./components/DuelLobby";
   import DuelQueue from "./components/DuelQueue";
@@ -117,6 +118,15 @@
             </PrivateRoute>
           }
         />
+        <Route
+          path="/course/:categoryKey"
+          element={
+            <PrivateRoute>
+              <ISLPracticePlayer />
+            </PrivateRoute>
+          }
+        />
+
 
         <Route
           path="/practice/:categoryKey"
