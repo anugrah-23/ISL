@@ -41,14 +41,14 @@ export default function CategoryPlayer() {
 
   const activeSentence = sentences[safeActiveIdx] || null;
 
-  // Reset fallback state when sentence changes
+  // Reset playback state when sentence changes
   useEffect(() => {
     setWordIdx(0);
     setFolderIdx(0);
     setExhausted(false);
   }, [safeActiveIdx]);
 
-  // Extract words (case-normalized)
+  // Extract words (clean + Title Case)
   const words = useMemo(() => {
     if (!activeSentence) return [];
     return activeSentence.text
@@ -60,7 +60,7 @@ export default function CategoryPlayer() {
       );
   }, [activeSentence]);
 
-  // Construct current video URL
+  // Current video URL
   const videoUrl = useMemo(() => {
     if (exhausted) return null;
     const word = words[wordIdx];
@@ -70,23 +70,38 @@ export default function CategoryPlayer() {
   }, [words, wordIdx, folderIdx, exhausted]);
 
   // --------------------
-  // FALLBACK LOGIC
+  // FALLBACK LOGIC (missing video)
   // --------------------
   function handleVideoError() {
-    // Try next folder first
+    // Try next folder
     if (folderIdx < R2_FOLDERS.length - 1) {
       setFolderIdx((f) => f + 1);
       return;
     }
 
-    // Reset folder, try next word
+    // Move to next word
     if (wordIdx < words.length - 1) {
       setFolderIdx(0);
       setWordIdx((w) => w + 1);
       return;
     }
 
-    // Everything exhausted
+    // All words exhausted
+    setExhausted(true);
+  }
+
+  // --------------------
+  // CONCATENATION LOGIC (video finished)
+  // --------------------
+  function handleVideoEnded() {
+    // Move to next word
+    if (wordIdx < words.length - 1) {
+      setFolderIdx(0);
+      setWordIdx((w) => w + 1);
+      return;
+    }
+
+    // Sentence finished
     setExhausted(true);
   }
 
@@ -177,6 +192,7 @@ export default function CategoryPlayer() {
                     autoPlay
                     preload="auto"
                     onError={handleVideoError}
+                    onEnded={handleVideoEnded}
                     style={{
                       width: "100%",
                       height: 320,
