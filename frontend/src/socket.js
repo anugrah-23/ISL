@@ -6,14 +6,13 @@ let socket = null;
 export function getSocket(currentUser) {
   if (socket) return socket;
 
-  const envUrl = process.env.REACT_APP_SOCKET_URL;
-  const defaultPort = process.env.REACT_APP_BACKEND_PORT || "5000";
-  const url =
-    envUrl ||
-    `${window.location.protocol}//${window.location.hostname}:${defaultPort}`;
+  const SOCKET_URL =
+    process.env.REACT_APP_API ||
+    "https://isl-production.up.railway.app";
 
-  socket = io(url, {
-    transports: ["websocket", "polling"],
+  socket = io(SOCKET_URL, {
+    transports: ["websocket"], // important for Railway + Vercel
+    withCredentials: true,
     autoConnect: true,
   });
 
@@ -25,13 +24,13 @@ export function getSocket(currentUser) {
     }
   });
 
-  socket.on("connect_error", (err) =>
-    console.error("[socket] connect_error", err?.message || err)
-  );
+  socket.on("connect_error", (err) => {
+    console.error("[socket] connect_error", err?.message || err);
+  });
 
-  socket.on("disconnect", (reason) =>
-    console.debug("[socket] disconnected", reason)
-  );
+  socket.on("disconnect", (reason) => {
+    console.debug("[socket] disconnected", reason);
+  });
 
   return socket;
 }
